@@ -1,5 +1,5 @@
 //
-//  CHTFirstViewController.h
+//  CHTStatsViewController.h
 //  ChaoTimer
 //
 //  Created by Jichao Li on 8/6/13.
@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CHTFirstViewController : UIViewController
+@interface CHTStatsViewController : UIViewController
 
 @end

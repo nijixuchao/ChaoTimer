@@ -1,18 +1,18 @@
 //
-//  CHTSecondViewController.m
+//  CHTStatsViewController.m
 //  ChaoTimer
 //
 //  Created by Jichao Li on 8/6/13.
 //  Copyright (c) 2013 Jichao Li. All rights reserved.
 //
 
-#import "CHTSecondViewController.h"
+#import "CHTStatsViewController.h"
 
-@interface CHTSecondViewController ()
+@interface CHTStatsViewController ()
 
 @end
 
-@implementation CHTSecondViewController
+@implementation CHTStatsViewController
 
 - (void)viewDidLoad
 {

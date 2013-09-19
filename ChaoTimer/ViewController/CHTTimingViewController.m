@@ -1,18 +1,20 @@
 //
-//  CHTFirstViewController.m
+//  CHTTimingViewController.m
 //  ChaoTimer
 //
 //  Created by Jichao Li on 8/6/13.
 //  Copyright (c) 2013 Jichao Li. All rights reserved.
 //
 
-#import "CHTFirstViewController.h"
+#import "CHTTimingViewController.h"
 
-@interface CHTFirstViewController ()
+@interface CHTTimingViewController ()
+@property (nonatomic) TimerStatus tStatus;
+@property (nonatomic) int time;
 
 @end
 
-@implementation CHTFirstViewController
+@implementation CHTTimingViewController
 
 - (void)viewDidLoad
 {

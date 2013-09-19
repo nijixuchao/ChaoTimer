@@ -18,12 +18,16 @@
 		0C2FA6F217B1E37F00A006B5 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0C2FA6F117B1E37F00A006B5 /* Default-568h@2x.png */; };
 		0C2FA6F517B1E37F00A006B5 /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0C2FA6F317B1E37F00A006B5 /* MainStoryboard_iPhone.storyboard */; };
 		0C2FA6F817B1E37F00A006B5 /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0C2FA6F617B1E37F00A006B5 /* MainStoryboard_iPad.storyboard */; };
-		0C2FA6FB17B1E37F00A006B5 /* CHTFirstViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C2FA6FA17B1E37F00A006B5 /* CHTFirstViewController.m */; };
+		0C2FA6FB17B1E37F00A006B5 /* CHTTimingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C2FA6FA17B1E37F00A006B5 /* CHTTimingViewController.m */; };
 		0C2FA6FD17B1E37F00A006B5 /* first.png in Resources */ = {isa = PBXBuildFile; fileRef = 0C2FA6FC17B1E37F00A006B5 /* first.png */; };
 		0C2FA6FF17B1E37F00A006B5 /* first@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0C2FA6FE17B1E37F00A006B5 /* first@2x.png */; };
-		0C2FA70217B1E37F00A006B5 /* CHTSecondViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C2FA70117B1E37F00A006B5 /* CHTSecondViewController.m */; };
+		0C2FA70217B1E37F00A006B5 /* CHTStatsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C2FA70117B1E37F00A006B5 /* CHTStatsViewController.m */; };
 		0C2FA70417B1E37F00A006B5 /* second.png in Resources */ = {isa = PBXBuildFile; fileRef = 0C2FA70317B1E37F00A006B5 /* second.png */; };
 		0C2FA70617B1E37F00A006B5 /* second@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0C2FA70517B1E37F00A006B5 /* second@2x.png */; };
+		0C2FA71217B68C4900A006B5 /* CHTSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C2FA71117B68C4900A006B5 /* CHTSession.m */; };
+		0C2FA71517B68D1C00A006B5 /* CHTSolve.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C2FA71417B68D1C00A006B5 /* CHTSolve.m */; };
+		0C2FA71817B9DB5600A006B5 /* CHTScramble.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C2FA71717B9DB5600A006B5 /* CHTScramble.m */; };
+		0C2FA71B17B9DC2C00A006B5 /* CHTUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C2FA71A17B9DC2C00A006B5 /* CHTUtil.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,14 +46,22 @@
 		0C2FA6F117B1E37F00A006B5 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		0C2FA6F417B1E37F00A006B5 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPhone.storyboard; sourceTree = "<group>"; };
 		0C2FA6F717B1E37F00A006B5 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
-		0C2FA6F917B1E37F00A006B5 /* CHTFirstViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CHTFirstViewController.h; sourceTree = "<group>"; };
-		0C2FA6FA17B1E37F00A006B5 /* CHTFirstViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CHTFirstViewController.m; sourceTree = "<group>"; };
+		0C2FA6F917B1E37F00A006B5 /* CHTTimingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CHTTimingViewController.h; sourceTree = "<group>"; };
+		0C2FA6FA17B1E37F00A006B5 /* CHTTimingViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CHTTimingViewController.m; sourceTree = "<group>"; };
 		0C2FA6FC17B1E37F00A006B5 /* first.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = first.png; sourceTree = "<group>"; };
 		0C2FA6FE17B1E37F00A006B5 /* first@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "first@2x.png"; sourceTree = "<group>"; };
-		0C2FA70017B1E37F00A006B5 /* CHTSecondViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CHTSecondViewController.h; sourceTree = "<group>"; };
-		0C2FA70117B1E37F00A006B5 /* CHTSecondViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CHTSecondViewController.m; sourceTree = "<group>"; };
+		0C2FA70017B1E37F00A006B5 /* CHTStatsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CHTStatsViewController.h; sourceTree = "<group>"; };
+		0C2FA70117B1E37F00A006B5 /* CHTStatsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CHTStatsViewController.m; sourceTree = "<group>"; };
 		0C2FA70317B1E37F00A006B5 /* second.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = second.png; sourceTree = "<group>"; };
 		0C2FA70517B1E37F00A006B5 /* second@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "second@2x.png"; sourceTree = "<group>"; };
+		0C2FA71017B68C4900A006B5 /* CHTSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHTSession.h; sourceTree = "<group>"; };
+		0C2FA71117B68C4900A006B5 /* CHTSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHTSession.m; sourceTree = "<group>"; };
+		0C2FA71317B68D1C00A006B5 /* CHTSolve.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHTSolve.h; sourceTree = "<group>"; };
+		0C2FA71417B68D1C00A006B5 /* CHTSolve.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHTSolve.m; sourceTree = "<group>"; };
+		0C2FA71617B9DB5600A006B5 /* CHTScramble.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHTScramble.h; sourceTree = "<group>"; };
+		0C2FA71717B9DB5600A006B5 /* CHTScramble.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHTScramble.m; sourceTree = "<group>"; };
+		0C2FA71917B9DC2C00A006B5 /* CHTUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHTUtil.h; sourceTree = "<group>"; };
+		0C2FA71A17B9DC2C00A006B5 /* CHTUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHTUtil.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,18 +108,14 @@
 		0C2FA6E117B1E37F00A006B5 /* ChaoTimer */ = {
 			isa = PBXGroup;
 			children = (
+				0C2FA70F17B68BB900A006B5 /* Util */,
+				0C2FA70E17B68BAF00A006B5 /* DataStructure */,
+				0C2FA70D17B68BA400A006B5 /* Resource */,
+				0C2FA70C17B68B9B00A006B5 /* ViewController */,
 				0C2FA6EA17B1E37F00A006B5 /* CHTAppDelegate.h */,
 				0C2FA6EB17B1E37F00A006B5 /* CHTAppDelegate.m */,
 				0C2FA6F317B1E37F00A006B5 /* MainStoryboard_iPhone.storyboard */,
 				0C2FA6F617B1E37F00A006B5 /* MainStoryboard_iPad.storyboard */,
-				0C2FA6F917B1E37F00A006B5 /* CHTFirstViewController.h */,
-				0C2FA6FA17B1E37F00A006B5 /* CHTFirstViewController.m */,
-				0C2FA6FC17B1E37F00A006B5 /* first.png */,
-				0C2FA6FE17B1E37F00A006B5 /* first@2x.png */,
-				0C2FA70017B1E37F00A006B5 /* CHTSecondViewController.h */,
-				0C2FA70117B1E37F00A006B5 /* CHTSecondViewController.m */,
-				0C2FA70317B1E37F00A006B5 /* second.png */,
-				0C2FA70517B1E37F00A006B5 /* second@2x.png */,
 				0C2FA6E217B1E37F00A006B5 /* Supporting Files */,
 			);
 			path = ChaoTimer;
@@ -126,6 +134,54 @@
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
+		};
+		0C2FA70C17B68B9B00A006B5 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				0C2FA6F917B1E37F00A006B5 /* CHTTimingViewController.h */,
+				0C2FA6FA17B1E37F00A006B5 /* CHTTimingViewController.m */,
+				0C2FA70017B1E37F00A006B5 /* CHTStatsViewController.h */,
+				0C2FA70117B1E37F00A006B5 /* CHTStatsViewController.m */,
+			);
+			name = ViewController;
+			path = /Users/nijixuchao/Developer/ChaoTimer/ChaoTimer/ViewController;
+			sourceTree = "<absolute>";
+		};
+		0C2FA70D17B68BA400A006B5 /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				0C2FA6FC17B1E37F00A006B5 /* first.png */,
+				0C2FA6FE17B1E37F00A006B5 /* first@2x.png */,
+				0C2FA70317B1E37F00A006B5 /* second.png */,
+				0C2FA70517B1E37F00A006B5 /* second@2x.png */,
+			);
+			name = Resource;
+			path = /Users/nijixuchao/Developer/ChaoTimer/ChaoTimer/Resource;
+			sourceTree = "<absolute>";
+		};
+		0C2FA70E17B68BAF00A006B5 /* DataStructure */ = {
+			isa = PBXGroup;
+			children = (
+				0C2FA71017B68C4900A006B5 /* CHTSession.h */,
+				0C2FA71117B68C4900A006B5 /* CHTSession.m */,
+				0C2FA71317B68D1C00A006B5 /* CHTSolve.h */,
+				0C2FA71417B68D1C00A006B5 /* CHTSolve.m */,
+				0C2FA71617B9DB5600A006B5 /* CHTScramble.h */,
+				0C2FA71717B9DB5600A006B5 /* CHTScramble.m */,
+			);
+			name = DataStructure;
+			path = /Users/nijixuchao/Developer/ChaoTimer/ChaoTimer/DataStructure;
+			sourceTree = "<absolute>";
+		};
+		0C2FA70F17B68BB900A006B5 /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				0C2FA71917B9DC2C00A006B5 /* CHTUtil.h */,
+				0C2FA71A17B9DC2C00A006B5 /* CHTUtil.m */,
+			);
+			name = Util;
+			path = /Users/nijixuchao/Developer/ChaoTimer/ChaoTimer/Util;
+			sourceTree = "<absolute>";
 		};
 /* End PBXGroup section */
 
@@ -201,8 +257,12 @@
 			files = (
 				0C2FA6E817B1E37F00A006B5 /* main.m in Sources */,
 				0C2FA6EC17B1E37F00A006B5 /* CHTAppDelegate.m in Sources */,
-				0C2FA6FB17B1E37F00A006B5 /* CHTFirstViewController.m in Sources */,
-				0C2FA70217B1E37F00A006B5 /* CHTSecondViewController.m in Sources */,
+				0C2FA6FB17B1E37F00A006B5 /* CHTTimingViewController.m in Sources */,
+				0C2FA70217B1E37F00A006B5 /* CHTStatsViewController.m in Sources */,
+				0C2FA71217B68C4900A006B5 /* CHTSession.m in Sources */,
+				0C2FA71517B68D1C00A006B5 /* CHTSolve.m in Sources */,
+				0C2FA71817B9DB5600A006B5 /* CHTScramble.m in Sources */,
+				0C2FA71B17B9DC2C00A006B5 /* CHTUtil.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -300,7 +360,9 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ChaoTimer/ChaoTimer-Prefix.pch";
 				INFOPLIST_FILE = "ChaoTimer/ChaoTimer-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -311,7 +373,9 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ChaoTimer/ChaoTimer-Prefix.pch";
 				INFOPLIST_FILE = "ChaoTimer/ChaoTimer-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
