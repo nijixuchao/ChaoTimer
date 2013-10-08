@@ -8,10 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
-@interface CHTScramble : NSObject
+@interface CHTScramble : NSObject <NSCoding>
 @property (nonatomic, strong) NSString *type;
+@property (nonatomic, strong) NSString *subType;
 @property (nonatomic, strong) NSString *scramble;
 
 + (CHTScramble *) getNewScrambleByType: (NSString *)newType;
-
+- (NSString *) getScrambleType;
+- (NSString *) getScrambleString;
 @end

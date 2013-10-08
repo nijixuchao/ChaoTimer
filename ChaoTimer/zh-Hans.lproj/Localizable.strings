@@ -1,0 +1,149 @@
+/*
+ Localizable.strings
+ ChaoTimer
+ 
+ Created by Jichao Li on 6/21/12.
+ Copyright (c) 2012 Sufflok University. All rights reserved.
+ */
+"language" = "Chinese";
+
+"Stats" = "数据";
+"Detail" = "详细";
+"Gestures Help" = "手势指南";
+"Timing" = "计时";
+"Help" = "帮助";
+"More" = "更多";
+"solve list" = "成绩列表：";
+"setting" = "计时器设置";
+"scramble" = "打乱详情";
+"session" = "分组管理";
+"new session" = "新建分组";
+
+"stickySessions" = "置顶分组";
+"mySessions" = "我的分组";
+"main session" = "默认分组";
+"sessionName" = "分组名称";
+"sessionNameDup" = "新的分组名称不能与已有分组名称重复。";
+"rename session" = "重命名分组";
+"inputSessionName" = "请在此输入新的分组名称";
+
+"scramble type" = "打乱类型";
+"cancel" = "取消";
+"done" = "确定";
+"penalty" = "惩罚" ;
+"this time was" = "本次还原";
+"no penalty" = "无惩罚";
+"delete last" = "删除上一次成绩";
+"sure?" = "你确定吗？";
+"no" = "取消";
+"yes" = "确定";
+"333r warning" = "三阶随机状态打乱初始化将会花费大约40秒，你确定要继续吗？";
+"333r" = "三阶随机状态打乱";
+"reset session" = "清空当前分组所有成绩";
+
+"Number of solves: " = "还原次数：";
+"Best time: " = "最快成绩：";
+"Worst time: " = "最慢成绩：";
+"Session Average: " = "去头尾平均：";
+"Session Mean: " = "所有平均：";
+"Current average of 5: " = "当前5次：";
+"Best average of 5: " = "最好5次：";
+"Current average of 12: " = "当前12次：";
+"Best average of 12: " = "最好12次：";
+"Current average of 100: " = "当前100次：";
+"Best average of 100: " = "最好100次：";
+
+"Best Time: " = "最快成绩：";
+"Worst Time: " = "最慢成绩：";
+"Session Avg: " = "去头尾平均：";
+"Current Avg5: " = "当前5次：";
+"Best Avg5: " = "最好5次：";
+"Current Avg12: " = "当前12次：";
+"Best Avg12: " = "最好12次：";
+"Current Avg100: " = "当前100次：";
+"Best Avg100: " = "最好100次： ";
+"Individual Times: " = "详细时间：";
+"Generate by" = "本次统计信息由ChaoTimer自动生成于";
+
+
+"1fhold" = "单指长按计时界面";
+"sr" = "单指向右轻扫";
+"sl" = "单指向左轻扫";
+"1f2t" = "单指双击成绩";
+"2f2t" = "双指双击计时界面";
+"2fup" = "双指向上轻划";
+"1fholdto" = "启动计时器";
+"srto" = "生成下一条打乱";
+"slto" = "删除上一条成绩";
+"1f2tto" = "选择惩罚：+2/DNF";
+"2f2tto" = "数据全部清零";
+"2fupto" = "选择打乱类型";
+
+"rate" = "如果你喜欢，请为我评分";
+"about" = "关于";
+"version" = "软件版本";
+"send feedback" = "意见反馈";
+"tell friends" = "向朋友推荐ChaoTimer";
+"mailSubject" = "来试试ChaoTimer吧";
+"mailBody" = "我最近在用ChaoTimer作为我的魔方计时器，它支持各种打乱和数据统计，是一个非常好的魔方计时器，你可以在App Store上下载，快来试试吧:<br><br> <a href=\"http://itunes.apple.com/us/app/chaotimer/id537516001?ls=1&mt=8\" title=\"http://itunes.apple.com/us/app/chaotimer/id537516001?ls=1&mt=8\">http://itunes.apple.com/us/app/chaotimer/id537516001?ls=1&mt=8</a>";
+
+"weibo login" = "新浪微博登陆";
+"weibo logout" = "新浪微博注销";
+"facebook login" = "Facebook登陆";
+"facebook logout" = "Facebook注销";
+"renren login" = "人人网登陆";
+"renren logout" = "人人网注销";
+"renren" = "人人网";
+
+"发送" = "发送";
+"关闭" = "关闭";
+"新浪微博" = "新浪微博";
+"确定" = "确定";
+"请输入微博内容" = "请输入微博内容";
+"取消" = "取消";
+"登录" = "登录";
+"用户名" = "用户名";
+"密码" = "密码";
+"Share" = "分享本组成绩至...";
+"OK" = "好的";
+"shareWeibo" = "分享微博";
+"share!" = "分享";
+"Successfully login" = "登陆成功";
+"Successfully logout" = "注销成功";
+"Fail to login" = "登录失败";
+"success share weibo" = "成功分享成绩至新浪微博";
+"fail share" = "微博发送失败";
+"send duplicate" = "已经成功分享，无需再次发送";
+"reAuthorize" = "请先登陆新浪微博并授权";
+"AuthoExpired" = "授权过期，请重新登陆并授权";
+"twitter fail title" = "无法发送推特";
+"twitter fail msg" = "暂时无法发送推特，请确认您的网络连接，并且在系统设置中至少设置好了一个推特账户。";
+"twitter success title" = "推特";
+"twitter success msg" = "成功在推特上分享成绩。";
+"Copy to Pasteboard" = "复制成绩到剪贴板";
+"pasteboard success" = "成功复制成绩到剪贴板";
+"copy scramble" = "复制本次打乱";
+"copy scramble success" = "成功复制打乱至剪贴板";
+
+"wca inspection" = "WCA 观察";
+"theme" = "主题";
+"two hands start" = "双手启动计时器";
+"rateTitle" = "为ChaoTimer评分";
+"rateBody" = "喜欢ChaoTimer么？如果你喜欢，请为我在App Store评分吧！";
+"remind later" = "以后再提醒我评分";
+"remind now" = "现在就去评分";
+"never remind" = "不想评分，以后不要提醒";
+"dup warning" = "分组命名重复";
+"choose another name" = "请给分组换一个名字";
+"start freeze" = "计时器启动延时";
+"15 sec" = "15秒观察时间";
+"no other gesture" = " (将无法识别其他手势)";
+"theme" = "主题";
+"select theme" = "选择主题";
+"theme blue" = "冷艳蓝";
+"theme green" = "帽子绿";
+"theme yellow" = "蛋碎黄";
+"theme red" = "姨妈红";
+"theme black" = "高端黑";
+"theme pink" = "脑残粉";
+"theme white" = "亮瞎白";

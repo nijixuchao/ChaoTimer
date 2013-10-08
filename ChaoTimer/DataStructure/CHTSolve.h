@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "CHTScramble.h"
+#import "CHTUtil.h"
 
 typedef enum penaltyType {
     PENALTY_NO_PENALTY = 0,
@@ -15,7 +16,7 @@ typedef enum penaltyType {
     PENALTY_DNF = 2
 } PenaltyType;
 
-@interface CHTSolve : NSObject
+@interface CHTSolve : NSObject <NSCoding>
 @property (nonatomic) int index;
 @property (nonatomic, strong) NSDate *timeStamp;
 @property (nonatomic, strong) CHTScramble *scramble;
@@ -26,5 +27,6 @@ typedef enum penaltyType {
 - (NSString *) toString;
 - (NSString *) toStringWith2DecimalPlaces;
 - (void) setTime: (int)newTimeBeforePenalty andPenalty: (PenaltyType)newPenalty;
-+ (CHTSolve *) newSolveWith: (int)newTime andPenalty:(PenaltyType)newPenalty andScramble: (CHTScramble *)newScramble;
+- (NSString *) getTimeStampString;
++ (CHTSolve *) newSolveWithTime: (int)newTime andPenalty:(PenaltyType)newPenalty andScramble: (CHTScramble *)newScramble;
 @end

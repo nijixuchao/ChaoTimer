@@ -32,7 +32,7 @@
 }
 
 - (NSString *) toString {
-    NSString *str = [self convertTimeFromMsecondToString:timeAfterPenalty];
+    NSString *str = [CHTUtil convertTimeFromMsecondToString:self.timeAfterPenalty];
     if (penalty == PENALTY_PLUS_2) {
         str = [str stringByAppendingString:@"+"];
     } else if (penalty == PENALTY_DNF) {
@@ -47,6 +47,12 @@
     
 }
 
+- (NSString *) getTimeStampString {
+    NSString *dateString = [NSDateFormatter localizedStringFromDate:self.timeStamp dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterShortStyle];
+    return dateString;
+    
+}
+
 - (void) setTime: (int)newTimeBeforePenalty andPenalty: (PenaltyType)newPenalty {
     self.timeStamp = [NSDate date];
     self.timeBeforePenalty = newTimeBeforePenalty;
@@ -54,34 +60,33 @@
     self.scramble = [[CHTScramble alloc] init];
 }
 
-+ (CHTSolve *) newSolveWith: (int)newTime andPenalty:(PenaltyType)newPenalty andScramble: (CHTScramble *)newScramble {
++ (CHTSolve *) newSolveWithTime: (int)newTime andPenalty:(PenaltyType)newPenalty andScramble: (CHTScramble *)newScramble {
     CHTSolve *newSolve = [[CHTSolve alloc] init];
     [newSolve setTime:newTime andPenalty:newPenalty];
     [newSolve setScramble:newScramble];
     return newSolve;
 }
 
-- (NSString *)convertTimeFromMsecondToString: (int)msecond {
-    NSString *outputTimeString;
-    if (msecond < 1000) {
-        outputTimeString = [NSString stringWithFormat:@"0.%03d", msecond];
-    } else if (msecond < 60000) {
-        int second = msecond * 0.001;
-        int msec = msecond % 1000;
-        outputTimeString = [NSString stringWithFormat:@"%d.%03d", second, msec];
-    } else if (msecond < 3600000) {
-        int minute = msecond / 60000;
-        int second = (msecond % 60000)/1000;
-        int msec = msecond % 1000;
-        outputTimeString = [NSString stringWithFormat:@"%d:%02d.%03d", minute, second, msec];
-    } else {
-        int hour = msecond / 3600000;
-        int minute = (msecond % 360000) / 60000;
-        int second = (msecond % 60000) / 1000;
-        int msec = msecond % 1000;
-        outputTimeString = [NSString stringWithFormat:@"%d:%02d:%02d.%03d", hour, minute, second, msec];
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+    [aCoder encodeObject:timeStamp forKey:@"timeStamp"];
+    [aCoder encodeInt:timeBeforePenalty forKey:@"timeBeforePenalty"];
+    [aCoder encodeInt:penalty forKey:@"timePenalty"];
+    [aCoder encodeObject:scramble forKey:@"solveScramble"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+    if (self == [super init]) {
+        @try {
+            self.timeStamp = [aDecoder decodeObjectForKey:@"timeStamp"];
+            self.timeBeforePenalty = [aDecoder decodeIntForKey:@"timeBeforePenalty"];
+            self.penalty = [aDecoder decodeIntForKey:@"timePenalty"];
+            self.scramble = [aDecoder decodeObjectForKey:@"solveScramble"];
+        }
+        @catch (NSException * e) {
+            NSLog(@"Exception: %@", e);
+        }
     }
-    return outputTimeString;
+    return self;
 }
 
 

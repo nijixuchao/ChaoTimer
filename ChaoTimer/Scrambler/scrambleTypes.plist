@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>2x2</key>
+	<array>
+		<string>random state</string>
+		<string>3-gen</string>
+		<string>6-gen</string>
+	</array>
+	<key>3x3</key>
+	<array>
+		<string>random state</string>
+		<string>old style</string>
+	</array>
+	<key>4x4</key>
+	<array>
+		<string>WCA</string>
+		<string>SiGN</string>
+	</array>
+	<key>5x5</key>
+	<array>
+		<string>WCA</string>
+		<string>SiGN</string>
+	</array>
+	<key>6x6</key>
+	<array>
+		<string>prefix</string>
+		<string>SiGN</string>
+	</array>
+	<key>7x7</key>
+	<array>
+		<string>prefix</string>
+		<string>SiGN</string>
+	</array>
+	<key>Megaminx</key>
+	<array>
+		<string>Pochmann</string>
+	</array>
+	<key>Clock</key>
+	<array>
+		<string>concise</string>
+	</array>
+	<key>Pyraminx</key>
+	<array>
+		<string>random state</string>
+	</array>
+	<key>Square-1</key>
+	<array>
+		<string>twist metric</string>
+	</array>
+	<key>Skewb</key>
+	<array>
+		<string>&lt;U,L,R,B&gt;</string>
+	</array>
+	<key>3x3 subsets</key>
+	<array>
+		<string>2-gen&lt;R,U&gt;</string>
+		<string>2-gen&lt;M,U&gt;</string>
+	</array>
+</dict>
+</plist>
