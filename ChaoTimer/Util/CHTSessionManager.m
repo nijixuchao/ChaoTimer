@@ -282,14 +282,12 @@
     }
     else {
         NSLog(@"sessionManager not exit");
-        NSFileManager *fileManager = [NSFileManager defaultManager];
-        [fileManager removeItemAtPath:[path objectAtIndex:0] error:nil];
-        sessionManager = [[CHTSessionManager alloc] init];
-        CHTSession *defaultSession = [CHTSession initWithDefault];
-        [CHTSessionManager saveSession:defaultSession];
+        sessionManager = [CHTUpdater updateFromOldVersion];
         [sessionManager save];
         return sessionManager;
     }
 }
+
+
 
 @end

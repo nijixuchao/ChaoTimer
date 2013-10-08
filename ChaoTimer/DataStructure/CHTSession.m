@@ -378,6 +378,10 @@
     [self.timeArray removeAllObjects];
 }
 
+- (void)setSolves: (NSMutableArray *)solves {
+    self.timeArray = solves;
+}
+
 - (void)encodeWithCoder:(NSCoder *)aCoder {
     [aCoder encodeObject:self.timeArray forKey:@"timeArray"];
     [aCoder encodeObject:self.currentType forKey:@"currentType"];
@@ -387,57 +391,10 @@
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
     if (self == [super init]) {
-        @try {
-            self.timeArray = [aDecoder decodeObjectForKey:@"timeArray"];
-            self.currentType = [aDecoder decodeObjectForKey:@"currentType"];
-            self.sessionName = [aDecoder decodeObjectForKey:@"sessionName"];
-        }
-        @catch (NSException * e) {
-            NSLog(@"Exception: %@", e);
-        }
+        self.timeArray = [aDecoder decodeObjectForKey:@"timeArray"];
+        self.currentType = [aDecoder decodeObjectForKey:@"currentType"];
+        self.sessionName = [aDecoder decodeObjectForKey:@"sessionName"];
     }
     return self;
 }
-
-/*
-- (void)save {
-    NSString *name;
-    if (self.sessionName == nil) {
-        name = @"main session";
-    } else
-        name = self.sessionName;
-    NSArray *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *escapedName = [CHTUtil escapeString:name];
-    NSString *fileName = [[path objectAtIndex:0] stringByAppendingPathComponent:[@"timeProcess_" stringByAppendingString:escapedName]];
-    NSMutableData *data = [[NSMutableData alloc] init];
-    NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
-    NSString *keyName = self.sessionName;
-    [archiver encodeObject:self forKey:keyName];
-    [archiver finishEncoding];
-    if ([data writeToFile:fileName atomically:YES]) {
-        NSLog(@"Save session");
-    };
-}
-
-+ (CHTSession *)loadByName:(NSString *)theName {
-    NSArray *path = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *escapedName = [CHTUtil escapeString:theName];
-    NSString *fileName = [[path objectAtIndex:0] stringByAppendingPathComponent:[@"timeProcess_" stringByAppendingString:escapedName]];
-    CHTSession *session= [[CHTSession alloc] init];
-    NSData *data = [[NSData alloc] initWithContentsOfFile:fileName];
-    NSString *keyName = theName;
-    if (data) {
-        NSKeyedUnarchiver *unarchiver = [[NSKeyedUnarchiver alloc] initForReadingWithData:data];
-        session = [unarchiver decodeObjectForKey:keyName];
-        [unarchiver finishDecoding];
-        NSLog(@"Get session");
-        return session;
-    }
-    else {
-        NSLog(@"session not exist");
-        return [CHTSession initWithName:theName];
-    }
-
-}
-*/
 @end

@@ -76,15 +76,10 @@
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
     if (self == [super init]) {
-        @try {
-            self.timeStamp = [aDecoder decodeObjectForKey:@"timeStamp"];
-            self.timeBeforePenalty = [aDecoder decodeIntForKey:@"timeBeforePenalty"];
-            self.penalty = [aDecoder decodeIntForKey:@"timePenalty"];
-            self.scramble = [aDecoder decodeObjectForKey:@"solveScramble"];
-        }
-        @catch (NSException * e) {
-            NSLog(@"Exception: %@", e);
-        }
+        self.timeStamp = [aDecoder decodeObjectForKey:@"timeStamp"];
+        self.timeBeforePenalty = [aDecoder decodeIntForKey:@"timeBeforePenalty"];
+        self.penalty = [aDecoder decodeIntForKey:@"timePenalty"];
+        self.scramble = [aDecoder decodeObjectForKey:@"solveScramble"];
     }
     return self;
 }

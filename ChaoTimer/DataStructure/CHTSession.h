@@ -37,6 +37,5 @@
 - (void)removeSolveAtIndex: (int)index;
 - (void)removeSolve: (CHTSolve *)aSolve;
 - (void)clear;
-//- (void)save;
-//+ (CHTSession *)loadByName:(NSString *)theName;
+- (void)setSolves: (NSMutableArray *)solves;
 @end
