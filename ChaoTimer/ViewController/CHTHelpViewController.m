@@ -9,13 +9,13 @@
 #import "CHTHelpViewController.h"
 
 @interface CHTHelpViewController ()
-
 @end
 
 @implementation CHTHelpViewController
 @synthesize helps = _helps;
 @synthesize helpsToDo = _helpsToDo;
 @synthesize helpsImage = _helpsImage;
+
 - (NSArray *)helps {
     if (!_helps) {
         _helps = [[NSArray alloc] initWithObjects:
@@ -73,7 +73,6 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    [self setTheme];
     [super viewWillAppear:animated];
 }
 
@@ -82,12 +81,6 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-- (void) setTheme {
-    CHTTheme *timerTheme = [CHTTheme getTimerTheme];
-    [timerTheme setNavigationControllerTheme:self.navigationController];
-    [self.tabBarController.tabBar setBarTintColor: timerTheme.tabBarColor];
 }
 
 #pragma mark - Table view data source
@@ -109,7 +102,8 @@
     cell.textLabel.text = [self.helpsToDo objectAtIndex:indexPath.row];
     cell.detailTextLabel.text = [self.helps objectAtIndex:indexPath.row];
     cell.imageView.image = [self.helpsImage objectAtIndex:indexPath.row];
-    
+    [cell.textLabel setFont:[CHTTheme font:FONT_REGULAR iphoneSize:20.0f ipadSize:22.0f]];
+    [cell.detailTextLabel setFont:[CHTTheme font:FONT_LIGHT iphoneSize:13.0f ipadSize:15.0f]];
     return cell;
 }
 
@@ -118,7 +112,7 @@
     if ([CHTUtil getDevice] == DEVICE_PHONE) {
         return 60;
     } else {
-        return 75;
+        return 80;
     }
 }
 

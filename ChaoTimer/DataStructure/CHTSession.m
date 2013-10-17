@@ -15,14 +15,8 @@
 @implementation CHTSession
 @synthesize timeArray = _timeArray;
 @synthesize currentType = _currentType;
+@synthesize currentSubType = _currentSubType;
 @synthesize sessionName = _sessionName;
-
-- (NSString *) currentType {
-    if (!_currentType) {
-        _currentType = @"3x3random state";
-    }
-    return _currentType;
-}
 
 - (NSString *) sessionName {
     if (!_sessionName) {
@@ -45,6 +39,8 @@
 + (CHTSession *) initWithName:(NSString *)name{
     CHTSession *session = [[CHTSession alloc] init];
     session.sessionName = name;
+    session.currentType = 1;
+    session.currentSubType = 0;
     return session;
 }
 
@@ -199,7 +195,7 @@
         if (DNFs > 1) {
             avg = -1;
         } else {
-            sum = sum - [self bestTime]-[self worstTime];
+            sum = sum - [self bestSolve].timeAfterPenalty -[self worstSolve].timeAfterPenalty;
             avg = sum / (self.numberOfSolves - 2);
         }
     }
@@ -384,7 +380,8 @@
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
     [aCoder encodeObject:self.timeArray forKey:@"timeArray"];
-    [aCoder encodeObject:self.currentType forKey:@"currentType"];
+    [aCoder encodeInt:self.currentType forKey:@"currentType"];
+    [aCoder encodeInt:self.currentSubType forKey:@"currentSubType"];
     [aCoder encodeObject:self.sessionName forKey:@"sessionName"];
     
 }
@@ -392,7 +389,8 @@
 - (id)initWithCoder:(NSCoder *)aDecoder {
     if (self == [super init]) {
         self.timeArray = [aDecoder decodeObjectForKey:@"timeArray"];
-        self.currentType = [aDecoder decodeObjectForKey:@"currentType"];
+        self.currentType = [aDecoder decodeIntForKey:@"currentType"];
+        self.currentSubType = [aDecoder decodeIntForKey:@"currentSubType"];
         self.sessionName = [aDecoder decodeObjectForKey:@"sessionName"];
     }
     return self;

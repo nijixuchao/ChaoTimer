@@ -18,21 +18,21 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Ready" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="aCf-A5-KDc">
-                                <rect key="frame" x="20" y="244" width="280" height="100"/>
+                                <rect key="frame" x="20" y="254" width="280" height="100"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="100" id="Z7N-3V-dvm"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-UltraLight" family="Helvetica Neue" pointSize="80"/>
+                                <fontDescription key="fontDescription" name="AvenirNext-UltraLight" family="Avenir Next" pointSize="80"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                                 <size key="shadowOffset" width="0.0" height="0.0"/>
                             </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Scramle" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="8" minimumFontSize="5" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="Ban-oe-13z">
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Scramle" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="7" minimumFontSize="5" adjustsLetterSpacingToFitWidth="YES" preferredMaxLayoutWidth="280" translatesAutoresizingMaskIntoConstraints="NO" id="Ban-oe-13z">
                                 <rect key="frame" x="20" y="20" width="280" height="134"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="134" id="hL0-uV-IKX"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-UltraLight" family="Helvetica Neue" pointSize="15"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="22"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                                 <size key="shadowOffset" width="0.0" height="0.0"/>
@@ -42,7 +42,7 @@
                         <constraints>
                             <constraint firstItem="aCf-A5-KDc" firstAttribute="trailing" secondItem="Ban-oe-13z" secondAttribute="trailing" id="GvX-Q4-ksm"/>
                             <constraint firstItem="Ban-oe-13z" firstAttribute="top" secondItem="16" secondAttribute="top" constant="20" symbolic="YES" id="c0A-yP-vj0"/>
-                            <constraint firstAttribute="centerY" secondItem="aCf-A5-KDc" secondAttribute="centerY" constant="-10" id="hRx-zN-DAl"/>
+                            <constraint firstAttribute="centerY" secondItem="aCf-A5-KDc" secondAttribute="centerY" constant="-20" id="hRx-zN-DAl"/>
                             <constraint firstAttribute="trailing" secondItem="Ban-oe-13z" secondAttribute="trailing" constant="20" symbolic="YES" id="izn-zt-nAG"/>
                             <constraint firstItem="aCf-A5-KDc" firstAttribute="leading" secondItem="Ban-oe-13z" secondAttribute="leading" id="pBD-dp-Jnj"/>
                             <constraint firstItem="Ban-oe-13z" firstAttribute="leading" secondItem="16" secondAttribute="leading" constant="20" symbolic="YES" id="v0s-EH-3ym"/>
@@ -104,13 +104,13 @@
         <scene sceneID="AY9-7l-Wyn">
             <objects>
                 <tableViewController id="bP1-EO-COe" customClass="CHTSessionViewController" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="pYl-Rs-3m3">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="pYl-Rs-3m3">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" restorationIdentifier="Cell" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" textLabel="Twn-gS-hqw" detailTextLabel="9fQ-61-9oe" style="IBUITableViewCellStyleSubtitle" id="9aG-Z9-fhJ">
-                                <rect key="frame" x="0.0" y="86" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="119" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="9aG-Z9-fhJ" id="lf2-t4-J6V">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -238,7 +238,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" textLabel="i4D-wp-5Fn" style="IBUITableViewCellStyleDefault" id="Xok-xJ-XED">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" textLabel="i4D-wp-5Fn" detailTextLabel="iOT-EC-akz" style="IBUITableViewCellStyleValue1" id="Xok-xJ-XED">
                                 <rect key="frame" x="0.0" y="55" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Xok-xJ-XED" id="Vgj-Pz-E7g">
@@ -246,10 +246,17 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="i4D-wp-5Fn">
-                                            <rect key="frame" x="15" y="0.0" width="290" height="43"/>
+                                            <rect key="frame" x="15" y="11" width="33" height="21"/>
                                             <autoresizingMask key="autoresizingMask"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Detail" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="iOT-EC-akz">
+                                            <rect key="frame" x="261" y="11" width="44" height="21"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>

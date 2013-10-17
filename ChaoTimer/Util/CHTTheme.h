@@ -20,14 +20,22 @@ typedef enum theme {
     THEME_PINK = 6,
 } Theme;
 
+typedef enum font_style {
+    FONT_BOLD = 0,
+    FONT_LIGHT = 1,
+    FONT_REGULAR = 2,
+} Font_Style;
+
 @interface CHTTheme : NSObject
 @property (nonatomic) Theme myTheme;
 @property (nonatomic) UIColor *textColor;
 @property (nonatomic) UIColor *backgroundColor;
 @property (nonatomic) UIColor *tabBarColor;
 @property (nonatomic) UIColor *navigationColor;
+@property (nonatomic) UIColor *barItemColor;
 
 + (CHTTheme *) initWithTheme: (Theme)theme;
+- (void) setNavigationControllerTheme;
 - (void) setNavigationControllerTheme: (UINavigationController *)controller;
 + (NSString *) getThemeName: (Theme)theme;
 - (NSString *) getMyThemeName;
@@ -35,4 +43,6 @@ typedef enum theme {
 + (CHTTheme *) getTimerTheme;
 + (NSMutableArray *) getAllTheme;
 + (UIColor *) getColorFromTheme: (Theme)theme;
+- (UIColor *) getTintColor;
++ (UIFont *) font: (Font_Style)style iphoneSize:(CGFloat)iphoneSize ipadSize:(CGFloat)ipadSize;
 @end

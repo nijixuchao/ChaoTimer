@@ -13,6 +13,12 @@
 @end
 
 @implementation CHTStatDetailViewController
+@synthesize statDetails;
+@synthesize session;
+@synthesize stat;
+@synthesize row;
+@synthesize best;
+@synthesize worst;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -26,21 +32,16 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    //[[CHTTheme getTimerTheme] setNavigationControllerTheme:self.navigationController];
     self.navigationItem.title = [CHTUtil getLocalizedString:@"Detail"];
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    //[self updateStatDetail];
     NSLog(@"stat detail will appear");
     [super viewWillAppear:animated];
-    [self reload];
+    [self getBestAndWorst];
+    [self.tableView reloadData];
 }
 
 - (void)didReceiveMemoryWarning
@@ -90,14 +91,13 @@
                 cell.textLabel.text = [solve toString];
             }
             cell.detailTextLabel.text = [solve getTimeStampString];
-        }
             break;
-            
+        }
         default:
             break;
     }
-    // Configure the cell...
-    
+    [cell.textLabel setFont:[CHTTheme font:FONT_REGULAR iphoneSize:17.0f ipadSize:17.0f]];
+    [cell.detailTextLabel setFont:[CHTTheme font:FONT_LIGHT iphoneSize:12.0f ipadSize:12.0f]];
     return cell;
 }
 
@@ -126,28 +126,44 @@
     }
 }
 
-/*
+
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
+    if (indexPath.section == 0) {
+        return NO;
+    } else {
+        return YES;
+    }
 }
-*/
 
-/*
+
 // Override to support editing the table view.
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
+        CHTSolve *solve = [self.statDetails objectAtIndex:indexPath.row];
+        [self.session removeSolve:solve];
+        [self.statDetails removeObjectAtIndex:indexPath.row];
+        [CHTSessionManager saveSession:self.session];
+        // Delete the row from the data source
+        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationMiddle];
+
+        [[self.tabBarController.tabBar.items objectAtIndex:0] setBadgeValue:[NSString stringWithFormat:@"%d", self.session.numberOfSolves]];
+        [self reload];
+        @try {
+            [self.tableView performSelector:@selector(reloadData) withObject:nil afterDelay:0.5];
+        }
+        @catch (NSException *exception) {
+            NSLog(@"Exception: %@", exception);
+        }
+        @finally {
+        }
+
+    }
 }
-*/
+
 
 /*
 // Override to support rearranging the table view.
@@ -193,6 +209,89 @@
  */
 
 - (void)reload{
+    [self.statDetails removeAllObjects];
+    switch (self.row) {
+        case 3:
+            // session avg
+            if (self.session.numberOfSolves == 0) {
+                [self.navigationController popViewControllerAnimated:YES];
+                return;
+            }
+            self.statDetails = [self.session getAllSolves];
+            self.stat.statValue = [[self.session sessionAvg] toString];
+            break;
+        case 4:
+            // session mean
+            if (self.session.numberOfSolves == 0) {
+                [self.navigationController popViewControllerAnimated:YES];
+                return;
+            }
+            self.statDetails = [self.session getAllSolves];
+            self.stat.statValue = [[self.session sessionMean] toString];
+            break;
+        case 5:
+            // current 5
+            if (self.session.numberOfSolves < 5) {
+                [self.navigationController popViewControllerAnimated:YES];
+                return;
+            }
+            self.statDetails = [self.session getCurrent:5];
+            self.stat.statValue = [[self.session currentAvgOf:5] toString];
+            break;
+        case 6:
+            // best 5
+            if (self.session.numberOfSolves < 5) {
+                [self.navigationController popViewControllerAnimated:YES];
+                return;
+            }
+            self.statDetails = [self.session getBest:5];
+            self.stat.statValue = [[self.session bestAvgOf:5] toString];
+            break;
+        case 7:
+            // current 12
+            if (self.session.numberOfSolves < 12) {
+                [self.navigationController popViewControllerAnimated:YES];
+                return;
+            }
+            self.statDetails = [self.session getCurrent:12];
+            self.stat.statValue = [[self.session currentAvgOf:12] toString];
+            break;
+        case 8:
+            // best 12
+            if (self.session.numberOfSolves < 12) {
+                [self.navigationController popViewControllerAnimated:YES];
+                return;
+            }
+            self.statDetails = [self.session getBest:12];
+            self.stat.statValue = [[self.session bestAvgOf:12] toString];
+            break;
+        case 9:
+            // current 100
+            if (self.session.numberOfSolves < 100) {
+                [self.navigationController popViewControllerAnimated:YES];
+                return;
+            }
+            self.statDetails = [self.session getCurrent:100];
+            self.stat.statValue = [[self.session currentAvgOf:100] toString];
+            break;
+        case 10:
+            // best 100
+            if (self.session.numberOfSolves < 100) {
+                [self.navigationController popViewControllerAnimated:YES];
+                return;
+            }
+            self.statDetails = [self.session getBest:100];
+            self.stat.statValue = [[self.session bestAvgOf:100] toString];
+            break;
+        default:
+            [self.navigationController popViewControllerAnimated:YES];
+            break;
+    }
+    [self getBestAndWorst];
+    [self.tableView performSelector:@selector(reloadData) withObject:nil afterDelay:0.5];
+}
+
+- (void)getBestAndWorst{
     self.best = self.statDetails.lastObject;
     self.worst = self.statDetails.lastObject;
     for (CHTSolve *aTime in self.statDetails) {
@@ -203,8 +302,7 @@
             self.best = aTime;
         }
     }
-    [self.tableView reloadData];
-}
 
+}
 
 @end

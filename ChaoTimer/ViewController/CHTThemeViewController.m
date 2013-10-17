@@ -38,7 +38,6 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    [self setTheme];
     [super viewWillAppear:animated];
 }
 
@@ -46,12 +45,6 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-- (void) setTheme {
-    CHTTheme *timerTheme = [CHTTheme getTimerTheme];
-    [timerTheme setNavigationControllerTheme:self.navigationController];
-    [self.tabBarController.tabBar setBarTintColor: timerTheme.tabBarColor];
 }
 
 #pragma mark - Table view data source
@@ -80,6 +73,7 @@
     } else {
         [cell setAccessoryType:UITableViewCellAccessoryNone];
     }
+    [cell.textLabel setFont:[CHTTheme font:FONT_REGULAR iphoneSize:17.0f ipadSize:17.0f]];
     return cell;
 }
 
@@ -99,7 +93,9 @@
     [cell setSelected:NO animated:YES];
     CHTTheme *theme = [CHTTheme initWithTheme:(Theme)[[themes objectAtIndex:indexPath.row] intValue]];
     [theme save];
-    [self setTheme];
+    [theme setNavigationControllerTheme];
+    [theme setNavigationControllerTheme:self.navigationController];
+    [self.tabBarController.tabBar setBarTintColor: theme.tabBarColor];
     [self.tableView reloadData];
 }
 

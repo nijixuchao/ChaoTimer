@@ -19,4 +19,5 @@
 @property (nonatomic, strong) NSMutableArray *statDetails;
 @property (nonatomic, strong) CHTSession *session;
 @property (nonatomic) CHTOneStat *stat;
+@property (nonatomic) int row;
 @end

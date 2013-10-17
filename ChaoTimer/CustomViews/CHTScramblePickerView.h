@@ -12,7 +12,7 @@
 
 @interface CHTScramblePickerView : CustomIOS7AlertView <UIPickerViewDataSource, UIPickerViewDelegate>
 
-@property (nonatomic, strong) NSString *selectedType;
-@property (nonatomic, strong) NSString *selectedSubType;
+@property (nonatomic) int selectedType;
+@property (nonatomic) int selectedSubType;
 - (id) init;
 @end

@@ -7,6 +7,18 @@
 //
 
 #import "CHTTimingViewController.h"
+#import "CHTSettings.h"
+#import "CHTSession.h"
+#import "CHTScramble.h"
+#import "CHTSolve.h"
+#import "CHTSessionManager.h"
+#import "CHTUtil.h"
+#import "CHTTheme.h"
+#import "CHTScramblePickerView.h"
+#import "CHTScrambler.h"
+#import <mach/mach_time.h>
+
+#define TAG_ALERT_CHANGE_SCRAMBLE_TYPE 4
 
 @interface CHTTimingViewController ()
 @property (nonatomic) TimerStatus timerStatus;
@@ -15,6 +27,10 @@
 @property (nonatomic) long long timeWhenTimerStart;
 @property (nonatomic, strong) CHTSession *session;
 @property (nonatomic, strong) CHTTheme *timerTheme;
+@property (nonatomic, strong) CHTScrambler *scrambler;
+@property (nonatomic, strong) CHTScramble *thisScramble;
+@property (nonatomic, strong) CHTScramble *nextScramble;
+@property (nonatomic, strong) CHTScramblePickerView *pickerView;
 @end
 
 @implementation CHTTimingViewController
@@ -23,9 +39,17 @@
 @synthesize timeWhenTimerStart;
 @synthesize session = _session;
 @synthesize timerTheme;
+@synthesize scrambler = _scrambler;
+@synthesize thisScramble = _thisScramble;
+@synthesize nextScramble = _nextScramble;
+@synthesize pickerView;
 BOOL wcaInspection;
-BOOL inspectionBegin = NO;
-BOOL plus2 = NO;
+BOOL inspectionBegin;
+BOOL plus2;
+int scrType;
+int scrSubType;
+int oldScrType;
+int oldScrSubType;
 
 - (CHTSession *) session {
     if (!_session) {
@@ -34,13 +58,19 @@ BOOL plus2 = NO;
     return _session;
 }
 
+- (CHTScrambler *)scrambler {
+    if(!_scrambler)
+        _scrambler = [[CHTScrambler alloc] init];
+    return _scrambler;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     UIApplication *myApp = [UIApplication sharedApplication];
     [myApp setIdleTimerDisabled:YES];
     [myApp setStatusBarHidden:NO withAnimation:NO];
-
+    
     longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(startTimer:)];
     [longPressGesture setAllowableMovement:50];
     [self setFreezeTime];
@@ -51,6 +81,16 @@ BOOL plus2 = NO;
     [[[[[self tabBarController] tabBar] items] objectAtIndex:2] setTitle:[CHTUtil getLocalizedString:@"Help"]];
     [[[[[self tabBarController] tabBar] items] objectAtIndex:3] setTitle:[CHTUtil getLocalizedString:@"More"]];
     
+    self.session = [[CHTSessionManager load] loadCurrentSession];
+    scrType = self.session.currentType;
+    scrSubType = self.session.currentSubType;
+    oldScrType = scrType;
+    oldScrSubType = scrSubType;
+    NSLog(@"Current scramble type: %d, %d", scrType, scrSubType);
+    [self.scrambler initSq1];
+    [self changeScramble];
+    [self.scrambleLabel setFont:[CHTTheme font:FONT_LIGHT iphoneSize:20.0f ipadSize:40.0f]];
+    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(orientationChanged:)  name:UIDeviceOrientationDidChangeNotification  object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -66,6 +106,11 @@ BOOL plus2 = NO;
     [self setTheme];
     self.session = [[CHTSessionManager load] loadCurrentSession];
     self.tabBarItem.badgeValue = [NSString stringWithFormat:@"%d", self.session.numberOfSolves];
+    if (self.session.currentType != oldScrType || self.session.currentSubType != oldScrSubType) {
+        [self changeScramble];
+        oldScrType = self.session.currentType;
+        oldScrSubType = self.session.currentSubType;
+    }
 }
 
 
@@ -75,6 +120,10 @@ BOOL plus2 = NO;
     [super viewWillDisappear:animated];
 }
 
+- (void)orientationChanged:(NSNotification *)notification{
+    NSLog(@"orientation changed");
+    [self.pickerView close];
+}
 
 - (void)didReceiveMemoryWarning
 {
@@ -84,12 +133,7 @@ BOOL plus2 = NO;
 
 - (void) setTheme {
     self.timerTheme = [CHTTheme getTimerTheme];
-    UIApplication *myApp = [UIApplication sharedApplication];
-    if (timerTheme.myTheme == THEME_WHITE) {
-        [myApp setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
-    } else {
-        [myApp setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
-    }
+    [self.timerTheme setNavigationControllerTheme];
     [self.view setBackgroundColor:self.timerTheme.backgroundColor];
     [self.tabBarController.tabBar setBarTintColor: self.timerTheme.tabBarColor];
     [self.scrambleLabel setTextColor: self.timerTheme.textColor];
@@ -262,15 +306,16 @@ BOOL plus2 = NO;
         self.timerStatus = TIMER_IDLE;
         inspectionBegin = NO;
         if (!plus2) {
-            [self.session addSolve:self.time withPenalty:PENALTY_NO_PENALTY scramble:[CHTScramble getNewScrambleByType:@"" ]];
+            [self.session addSolve:self.time withPenalty:PENALTY_NO_PENALTY scramble:self.thisScramble];
         }
         else {
-            [self.session addSolve:self.time withPenalty:PENALTY_PLUS_2 scramble:[CHTScramble getNewScrambleByType:@"" ]];
+            [self.session addSolve:self.time withPenalty:PENALTY_PLUS_2 scramble:self.thisScramble];
             plus2 = NO;
             self.timeLabel.text = [self.session.lastSolve toString];
         }
         [CHTSessionManager saveSession:self.session];
         self.tabBarItem.badgeValue = [NSString stringWithFormat:@"%d", self.session.numberOfSolves];
+        [self displayNextScramble];
         /*
         self.thisScramble = self.nextScramble;
         //self.thisScramble = [self.scrambler generateScrambleString:self.scrambleType];
@@ -339,15 +384,52 @@ BOOL plus2 = NO;
 - (IBAction)chooseScrambleType:(id)sender {
     NSLog(@"Choose Scramble Type.");
     if (self.timerStatus != TIMER_TIMING && self.timerStatus != TIMER_INSPECT) {
-        CHTScramblePickerView *pickerView = [[CHTScramblePickerView alloc] init];
+        pickerView = [[CHTScramblePickerView alloc] init];
+        [pickerView setDelegate:self];
+        [pickerView setTag:TAG_ALERT_CHANGE_SCRAMBLE_TYPE];
         [pickerView show];
     }
 }
 
+/* Delegate of CustomIOS7AlertView*/
+- (void)customIOS7dialogButtonTouchUpInside: (CHTScramblePickerView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    //NSLog(@"Button Clicked! %d, %d", buttonIndex, [alertView tag]);
+    [alertView close];
+    if (buttonIndex == 1) {
+        scrType = alertView.selectedType;
+        scrSubType = alertView.selectedSubType;
+        self.session.currentType = alertView.selectedType;
+        self.session.currentSubType = alertView.selectedSubType;
+        oldScrType = scrType;
+        oldScrSubType = scrSubType;
+        [self changeScramble];
+        [CHTSessionManager saveSession:self.session];
+        NSLog(@"choose scramble index: %d, %d", self.session.currentType, self.session.currentSubType);
+    }
+}
+
+- (void)changeScramble{
+    self.nextScramble = [CHTScramble getNewScrambleByScrambler:self.scrambler type:self.session.currentType subType:self.session.currentSubType];
+    [self displayNextScramble];
+}
+
+- (void)displayNextScramble {
+    self.thisScramble = self.nextScramble;
+    self.scrambleLabel.text = self.thisScramble.scramble;
+    NSLog(@"this scramble: %@", self.thisScramble.scramble);
+    [self performSelector:@selector(generateNextScramble) withObject:nil afterDelay:1];
+}
+
 - (IBAction)getNewScramble:(id)sender {
     if (self.timerStatus != TIMER_TIMING && self.timerStatus != TIMER_INSPECT) {
-        
+        [self displayNextScramble];
     }
+}
+
+- (void)generateNextScramble {
+    self.nextScramble = [CHTScramble getNewScrambleByScrambler:self.scrambler type:self.session.currentType subType:self.session.currentSubType];
+    NSLog(@"next scramble: %@", self.nextScramble.scramble);
 }
 
 - (void)alertView:(UIAlertView *)uiAlertView clickedButtonAtIndex:(NSInteger)buttonIndex{
@@ -390,24 +472,10 @@ BOOL plus2 = NO;
                     break;
             }
             break;
-        case 4:
+        case TAG_ALERT_CHANGE_SCRAMBLE_TYPE:
             //choose scramble type
             if (buttonIndex == 1) {
-                /*
-                NSString *typeTemp = [NSString stringWithString:self.alert.chooseType];
-                NSString *subsetTemp = [NSString stringWithString:self.alert.chooseSubsets];
-                self.scrambleType = [typeTemp stringByAppendingString:subsetTemp];
-                self.dataProcessor.CurrentType = self.scrambleType;
-                // new a scrambler
-                //self.scrambler = nil;
-                //self.scrambler = [[Scrambler alloc] init];
-                self.thisScramble = [self.scrambler generateScrambleString:self.scrambleType];
-                NSLog(@"this: %@", self.thisScramble);
-                [self setScrambleDisplayFont];
-                self.scrambleDisplay.text = self.thisScramble;
-                self.nextScramble = self.thisScramble;
-                [self performSelector:@selector(generateNextScramble) withObject:nil afterDelay:1];
-                 */
+                NSLog(@"new Scramble");
             }
             
             break;
@@ -437,11 +505,6 @@ BOOL plus2 = NO;
             break;
     }
     self.tabBarItem.badgeValue = [NSString stringWithFormat:@"%d", self.session.numberOfSolves];
-}
-
-- (void) generateNextScramble {
-    //self.nextScramble = [self.scrambler generateScrambleString:self.scrambleType];
-    NSLog(@"next scramble");
 }
 
 @end

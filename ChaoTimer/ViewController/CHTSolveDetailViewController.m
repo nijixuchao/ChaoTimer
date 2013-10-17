@@ -8,8 +8,7 @@
 
 #import "CHTSolveDetailViewController.h"
 
-#define FONT_SIZE 14.0f
-#define CELL_CONTENT_MARGIN 10.0f
+#define FONT_SIZE 13.0f
 
 @interface CHTSolveDetailViewController ()
 
@@ -30,12 +29,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    self.navigationItem.title = [CHTUtil getLocalizedString:@"scramble"];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(displayActionSheet)];
 }
 
 - (void)didReceiveMemoryWarning
@@ -64,21 +59,32 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     switch (indexPath.row) {
         case 0:
-            [cell.textLabel setFont: [UIFont systemFontOfSize:30.0]];
+            [cell.textLabel setFont:[CHTTheme font:FONT_BOLD iphoneSize:35.0f ipadSize:35.0f]];
+            [cell.detailTextLabel setFont:[CHTTheme font:FONT_LIGHT iphoneSize:17.0f ipadSize:17.0f]];
             [cell.textLabel setText:[self.solve toString]];
+            if (self.solve.penalty != PENALTY_NO_PENALTY) {
+                [cell.detailTextLabel setText:[NSString stringWithFormat:@"(%@)", [CHTUtil convertTimeFromMsecondToString:self.solve.timeBeforePenalty]]];
+            } else {
+                [cell.detailTextLabel setText:@""];
+            }
             break;
         case 1:
-            [cell.textLabel setFont: [UIFont systemFontOfSize:18.0]];
-            [cell.textLabel setText:[self.solve.scramble getScrambleType]];
+            [cell.textLabel setFont:[CHTTheme font:FONT_REGULAR iphoneSize:20.0f ipadSize:20.0f]];
+            [cell.detailTextLabel setFont:[CHTTheme font:FONT_LIGHT iphoneSize:17.0f ipadSize:17.0f]];
+            [cell.textLabel setText:self.solve.scramble.scrType];
+            [cell.detailTextLabel setText:self.solve.scramble.scrSubType];
             break;
         case 2:
-            [cell.textLabel setFont: [UIFont systemFontOfSize:18.0]];
+            [cell.textLabel setFont:[CHTTheme font:FONT_REGULAR iphoneSize:17.0f ipadSize:17.0f]];
+            [cell.detailTextLabel setFont:[CHTTheme font:FONT_LIGHT iphoneSize:17.0f ipadSize:17.0f]];
             [cell.textLabel setText:[self.solve getTimeStampString]];
+            [cell.detailTextLabel setText:@""];
             break;
         case 3:
-            [cell.textLabel setFont: [UIFont systemFontOfSize:FONT_SIZE]];
+            [cell.textLabel setFont:[CHTTheme font:FONT_REGULAR iphoneSize:FONT_SIZE ipadSize:FONT_SIZE + 4]];
             [cell.textLabel setNumberOfLines:0];
-            [cell.textLabel setText:[self.solve.scramble getScrambleString]];
+            [cell.detailTextLabel setText:@""];
+            [cell.textLabel setText:self.solve.scramble.scramble];
             break;
         default:
             break;
@@ -93,18 +99,55 @@
     NSString *text;
     switch (indexPath.row) {
         case 0:
-            return 50.0f;
+            return 55.0f;
         case 1:
         case 2:
             return 44.0f;
         case 3:
-            text = [self.solve.scramble getScrambleString];
-            return [CHTUtil calculateCellHeightWithText:text fontSize:FONT_SIZE cellWidth:[CHTUtil getScreenWidth] cellMargin:CELL_CONTENT_MARGIN];
-            break;
+            text = self.solve.scramble.scramble;
+            return [CHTUtil heightOfContent:text font:[CHTTheme font:FONT_REGULAR iphoneSize:FONT_SIZE ipadSize:FONT_SIZE + 4]];
         default:
             return 44.0f;
     }
 }
+
+- (void) displayActionSheet {
+    if ([CHTUtil getDevice] == DEVICE_PAD) {
+        if (shareSheet.visible) {
+            [shareSheet dismissWithClickedButtonIndex:-1 animated:YES];
+        } else {
+            shareSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:[CHTUtil getLocalizedString: @"cancel"] destructiveButtonTitle:nil otherButtonTitles:[CHTUtil getLocalizedString: @"copy scramble"], nil];
+            [shareSheet setActionSheetStyle:UIActionSheetStyleBlackTranslucent];
+            [shareSheet showFromBarButtonItem:self.navigationItem.rightBarButtonItem animated:YES];
+        }
+    } else {
+        shareSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:[CHTUtil getLocalizedString: @"cancel"] destructiveButtonTitle:nil otherButtonTitles:[CHTUtil getLocalizedString: @"copy scramble"], nil];
+        [shareSheet setActionSheetStyle:UIActionSheetStyleBlackTranslucent];
+        [shareSheet showInView:[UIApplication sharedApplication].keyWindow];
+    }
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    switch (buttonIndex) {
+        case 0:
+            [self copyToPaste];
+            break;
+        default:
+            break;
+    }
+}
+
+- (IBAction)copyToPaste {
+    NSString *textToPaste = self.solve.scramble.scramble;
+    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+    pasteboard.string = textToPaste;
+    NSLog(@"%@", textToPaste);
+    
+    UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:nil message:[CHTUtil getLocalizedString: @"copy scramble success"] delegate:self cancelButtonTitle:[CHTUtil getLocalizedString: @"OK"] otherButtonTitles:nil];
+    [alertView show];
+}
+
 
 
 
@@ -124,7 +167,7 @@
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         // Delete the row from the data source
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
+    }
     else if (editingStyle == UITableViewCellEditingStyleInsert) {
         // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
     }   

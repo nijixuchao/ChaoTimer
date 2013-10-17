@@ -12,7 +12,10 @@
 #import "CHTUtil.h"
 #import "CHTSolve.h"
 
-@interface CHTSolveDetailViewController : UITableViewController
+@interface CHTSolveDetailViewController : UITableViewController<UIActionSheetDelegate> {
+    UIActionSheet *shareSheet;
+}
+
 @property (nonatomic, strong) CHTSolve *solve;
 
 @end

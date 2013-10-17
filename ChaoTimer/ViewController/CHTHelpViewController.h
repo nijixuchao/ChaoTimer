@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "CHTUtil.h"
 #import "CHTTheme.h"
+
 @interface CHTHelpViewController : UITableViewController
 @property (nonatomic, strong) NSArray *helps;
 @property (nonatomic, strong) NSArray *helpsToDo;

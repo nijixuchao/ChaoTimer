@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @interface CHTOneStat : NSObject
-@property (nonatomic, copy) NSString *statType, *statValue;
+@property (nonatomic, strong) NSString *statType, *statValue;
 
 + (CHTOneStat *) initWithType: (NSString *)type Value: (NSString *)value;
 @end

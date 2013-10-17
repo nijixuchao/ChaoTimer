@@ -13,7 +13,7 @@
 "Timing" = "Timing";
 "Help" = "Help";
 "More" = "More";
-"solve list" = "Solve List:";
+"solve list" = "Solve List";
 "setting" = "Timer Settings";
 "scramble" = "Scramble";
 "session" = "Sessions";
@@ -118,9 +118,9 @@
 "twitter success title" = "Tweeted";
 "twitter success msg" = "Successfully tweeted.";
 "Copy to Pasteboard" = "Copy to Pasteboard";
-"pasteboard success" = "Sucessfully copy to pasteboard.";
-"copy scramble" = "Copy scramble";
-"copy scramble success" = "Sucessfully copy scramble to pasteboard.";
+"pasteboard success" = "Sucessfully copied to pasteboard.";
+"copy scramble" = "Copy Scramble";
+"copy scramble success" = "Sucessfully copied scramble to pasteboard.";
 
 "wca inspection" = "WCA Inspection";
 "theme" = "Theme";
@@ -145,3 +145,4 @@
 "theme black" = "Black";
 "theme pink" = "Pink";
 "theme white" = "White";
+"original time" = "Original Time";

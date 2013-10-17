@@ -25,52 +25,70 @@
             timerTheme.textColor = [UIColor whiteColor];
             timerTheme.backgroundColor = lightBlackColor;
             timerTheme.tabBarColor = [UIColor blackColor];
+            timerTheme.barItemColor = [UIColor yellowColor];
             break;
         case THEME_WHITE:
             timerTheme.textColor = [UIColor blackColor];
             timerTheme.backgroundColor = [UIColor whiteColor];
             timerTheme.tabBarColor = timerTheme.navigationColor;
+            timerTheme.barItemColor = [UIColor blueColor];
             break;
         case THEME_RED:
             timerTheme.textColor = [UIColor whiteColor];
             timerTheme.backgroundColor = lightBlackColor;
             timerTheme.tabBarColor = [UIColor blackColor];
+            timerTheme.barItemColor = [UIColor yellowColor];
             break;
         case THEME_GREEN:
             timerTheme.textColor = [UIColor whiteColor];
             timerTheme.backgroundColor = lightBlackColor;
             timerTheme.tabBarColor = [UIColor blackColor];
+            timerTheme.barItemColor = [UIColor yellowColor];
             break;
         case THEME_YELLOW:
             timerTheme.textColor = [UIColor whiteColor];
             timerTheme.backgroundColor = lightBlackColor;
             timerTheme.tabBarColor = [UIColor blackColor];
+            timerTheme.barItemColor = [UIColor orangeColor];
             break;
         case THEME_BLACK:
             timerTheme.textColor = [UIColor whiteColor];
             timerTheme.backgroundColor = lightBlackColor;
             timerTheme.tabBarColor = [UIColor blackColor];
+            timerTheme.barItemColor = [UIColor whiteColor];
             break;
         case THEME_PINK:
             timerTheme.textColor = [UIColor whiteColor];
             timerTheme.backgroundColor = lightBlackColor;
             timerTheme.tabBarColor = [UIColor blackColor];
+            timerTheme.barItemColor = [UIColor yellowColor];
             break;
     }
     return timerTheme;
 
 }
 
-- (void) setNavigationControllerTheme: (UINavigationController *)controller {
+- (void) setNavigationControllerTheme{
     UIApplication *myApp = [UIApplication sharedApplication];
     if (myTheme == THEME_WHITE) {
         [myApp setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
     } else {
         [myApp setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
     }
-    controller.navigationBar.titleTextAttributes = @{UITextAttributeTextColor : self.textColor};
+    [[UINavigationBar appearance] setTitleTextAttributes:@{
+        NSFontAttributeName:[CHTTheme font:FONT_REGULAR iphoneSize:20.0f ipadSize:20.0f],
+        NSForegroundColorAttributeName: self.textColor}];
+    [[UINavigationBar appearance] setBarTintColor:self.navigationColor];
+    [[UINavigationBar appearance] setTintColor:self.barItemColor];
+    [[UIBarButtonItem appearance] setTitleTextAttributes:@{
+      NSFontAttributeName:[CHTTheme font:FONT_REGULAR iphoneSize:17.0f ipadSize:17.0f]}
+        forState:UIControlStateNormal];
+    [[UITabBar appearance] setBarTintColor:self.tabBarColor];
+}
+
+- (void) setNavigationControllerTheme: (UINavigationController *)controller {
     [controller.navigationBar setBarTintColor:self.navigationColor];
-    [controller.navigationBar setTintColor:self.textColor];
+    [controller.navigationBar setTintColor:self.barItemColor];
 }
 
 + (NSString *) getThemeName: (Theme)theme {
@@ -147,4 +165,35 @@
     return color;
 }
 
+- (UIColor *)getTintColor{
+    if (self.myTheme == THEME_WHITE) {
+        return [UIColor lightGrayColor];
+    } else {
+        return [CHTTheme getColorFromTheme:myTheme];
+    }
+}
+
++ (UIFont *) font: (Font_Style)style iphoneSize:(CGFloat)iphoneSize ipadSize:(CGFloat)ipadSize
+{
+    if ([CHTUtil getDevice] == DEVICE_PHONE) {
+        switch (style) {
+            case FONT_BOLD:
+                return [UIFont fontWithName:@"Aleo-Bold" size:iphoneSize];
+            case FONT_LIGHT:
+                return [UIFont fontWithName:@"Aleo-Light" size:iphoneSize];
+            case FONT_REGULAR:
+                return [UIFont fontWithName:@"Aleo-Regular" size:iphoneSize];
+        }
+    }
+    else {
+        switch (style) {
+            case FONT_BOLD:
+                return [UIFont fontWithName:@"Aleo-Bold" size:ipadSize];
+            case FONT_LIGHT:
+                return [UIFont fontWithName:@"Aleo-Light" size:ipadSize];
+            case FONT_REGULAR:
+                return [UIFont fontWithName:@"Aleo-Regular" size:ipadSize];
+        }
+    }
+}
 @end

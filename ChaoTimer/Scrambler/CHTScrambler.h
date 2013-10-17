@@ -10,4 +10,8 @@
 
 @interface CHTScrambler : NSObject
 
+- (NSString *)getScrStringByType: (int)type subset: (int)subset;
+- (void) initSq1;
++ (NSArray *) scrambleTypes;
+
 @end

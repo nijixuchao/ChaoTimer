@@ -46,8 +46,13 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    [self setTheme];
     self.sessionManager = [CHTSessionManager load];
+    if ([CHTUtil getDevice] == DEVICE_PAD) {
+        [self.navigationController.navigationBar setTintColor:[UIColor blackColor]];
+        [[UINavigationBar appearance] setTitleTextAttributes:@{
+          NSFontAttributeName:[CHTTheme font:FONT_REGULAR iphoneSize:20.0f ipadSize:20.0f],
+        NSForegroundColorAttributeName: [UIColor blackColor]}];
+    }
     [self.tableView reloadData];
     [super viewWillAppear:animated];
 }
@@ -55,11 +60,6 @@
 - (void)viewWillDisappear:(BOOL)animated {
     [self.sessionManager save];
     [super viewWillDisappear:animated];
-}
-
-- (void) setTheme {
-    CHTTheme *timerTheme = [CHTTheme getTimerTheme];
-    [timerTheme setNavigationControllerTheme:self.navigationController];
 }
 
 - (void)didReceiveMemoryWarning
@@ -103,7 +103,7 @@
         case 0: {
             NSString *title = [self.sessionManager getStickySessionAt:indexPath.row];
             CHTSession *session = [CHTSessionManager loadSessionWithName:title];
-            NSString *subTitle = [NSString stringWithFormat:@"%@: %d", [CHTUtil getLocalizedString:@"Number of solves: "], [session numberOfSolves]];
+            NSString *subTitle = [NSString stringWithFormat:@"%@%d", [CHTUtil getLocalizedString:@"Number of solves: "], [session numberOfSolves]];
             if (indexPath.row == 0) {
                 cell.textLabel.text = [CHTUtil getLocalizedString:title];
 
@@ -135,6 +135,8 @@
         default:
             break;
     }
+    [cell.textLabel setFont:[CHTTheme font:FONT_REGULAR iphoneSize:17.0f ipadSize:17.0f]];
+    [cell.detailTextLabel setFont:[CHTTheme font:FONT_LIGHT iphoneSize:12.0f ipadSize:12.0f]];
     return cell;
 }
 
@@ -299,8 +301,6 @@
 - (IBAction)addNewSession:(id)sender {
     CHTEditSessionViewController *newSessionViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"editSession"];
     newSessionViewController.navigationItem.title = [CHTUtil getLocalizedString:@"new session"];
-    CHTTheme *timerTheme = [CHTTheme getTimerTheme];
-    [timerTheme setNavigationControllerTheme:newSessionViewController.navigationController];
     newSessionViewController.isNew = YES;
     [self.navigationController pushViewController:newSessionViewController animated:YES];
     
@@ -309,8 +309,6 @@
 - (void)editSession:(NSIndexPath *)indexPath {
     CHTEditSessionViewController *newSessionViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"editSession"];
     newSessionViewController.navigationItem.title = [CHTUtil getLocalizedString:@"rename session"];
-    CHTTheme *timerTheme = [CHTTheme getTimerTheme];
-    [timerTheme setNavigationControllerTheme:newSessionViewController.navigationController];
     newSessionViewController.isNew = NO;
     if (indexPath.section == 0) {
         newSessionViewController.oldSessionName = [self.sessionManager getStickySessionAt:indexPath.row];

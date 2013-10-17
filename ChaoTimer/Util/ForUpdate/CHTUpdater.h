@@ -7,8 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "RubiksTimerDataProcessing.h"
-#import "RubiksTimerTimeObj.h"
 
 @class CHTSessionManager;
 @interface CHTUpdater : NSObject

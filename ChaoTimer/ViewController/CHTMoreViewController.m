@@ -8,6 +8,7 @@
 
 #import "CHTMoreViewController.h"
 
+
 @interface CHTMoreViewController ()
 @property (nonatomic, strong) CHTTheme *timerTheme;
 @end
@@ -37,7 +38,6 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    [self.tableView reloadData];
     [super viewDidAppear:animated];
 }
 
@@ -48,14 +48,8 @@
 }
 - (void)viewWillAppear:(BOOL)animated
 {
-    [self setTheme];
+    [self.tableView reloadData];
     [super viewWillAppear:animated];
-}
-
-- (void) setTheme {
-    timerTheme = [CHTTheme getTimerTheme];
-    [timerTheme setNavigationControllerTheme:self.navigationController];
-    [self.tabBarController.tabBar setBarTintColor: timerTheme.tabBarColor];
 }
 
 
@@ -63,7 +57,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 2;
+    return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -73,7 +67,10 @@
             return 1;
             break;
         case 1:
-            return 1;
+            return 2;
+            break;
+        case 2:
+            return 3;
             break;
         default:
             return 0;
@@ -107,8 +104,34 @@
             switch (indexPath.row) {
                 case 0:
                     cell.textLabel.text = [CHTUtil getLocalizedString:@"theme"];
-                    cell.detailTextLabel.text = [timerTheme getMyThemeName];
+                    cell.detailTextLabel.text = [self.timerTheme getMyThemeName];
                     cell.imageView.image = [UIImage imageNamed:@"theme.png"];
+                    break;
+                case 1:
+                    cell.textLabel.text = [CHTUtil getLocalizedString:@"setting"];
+                    cell.detailTextLabel.text = @"";
+                    cell.imageView.image = [UIImage imageNamed:@"setting.png"];
+                    break;
+                default:
+                    break;
+            }
+            break;
+        case 2:
+            switch (indexPath.row) {
+                case 0:
+                    cell.textLabel.text = [CHTUtil getLocalizedString:@"rate"];
+                    cell.detailTextLabel.text = @"";
+                    cell.imageView.image = [UIImage imageNamed:@"rate.png"];
+                    break;
+                case 1:
+                    cell.textLabel.text = [CHTUtil getLocalizedString:@"send feedback"];
+                    cell.detailTextLabel.text = @"";
+                    cell.imageView.image = [UIImage imageNamed:@"feedback.png"];
+                    break;
+                case 2:
+                    cell.textLabel.text = [CHTUtil getLocalizedString:@"tell friends"];
+                    cell.detailTextLabel.text = @"";
+                    cell.imageView.image = [UIImage imageNamed:@"tell_friends.png"];
                     break;
                 default:
                     break;
@@ -117,6 +140,9 @@
         default:
             break;
     }
+    [cell.detailTextLabel setTextColor:[timerTheme getTintColor]];
+    [cell.textLabel setFont:[CHTTheme font:FONT_REGULAR iphoneSize:17.0f ipadSize:17.0f]];
+    [cell.detailTextLabel setFont:[CHTTheme font:FONT_LIGHT iphoneSize:17.0f ipadSize:17.0f]];
     return cell;
 }
 
@@ -140,9 +166,74 @@
                     break;
             }
             break;
+        case 2:
+            switch (indexPath.row) {
+                case 0:
+                    [self rateForApp];
+                    break;
+                case 1:
+                    [self sendFeedback];
+                    break;
+                case 2:
+                    [self tellFriends];
+                    break;
+                default:
+                    break;
+            }
+            break;
         default:
             break;
     }
+}
+
+- (IBAction) tellFriends {
+    MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
+    mc.mailComposeDelegate = self;
+    [mc setSubject:[CHTUtil getLocalizedString:@"mailSubject"]];
+    [mc setMessageBody:[CHTUtil getLocalizedString:@"mailBody"] isHTML:YES];
+    [mc setModalPresentationStyle:UIModalPresentationFormSheet];
+    [self presentViewController:mc animated:YES completion:nil];
+}
+
+- (IBAction) sendFeedback {
+    MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
+    mc.mailComposeDelegate = self;
+    [mc setSubject:@"Feedback of ChaoTimer"];
+    [mc setToRecipients:[NSArray arrayWithObjects:@"nijixuchao@gmail.com", nil]];
+    [mc setModalPresentationStyle:UIModalPresentationFormSheet];
+    [self presentViewController:mc animated:YES completion:nil];
+}
+
+
+- (IBAction)rateForApp {
+    NSLog(@"===== openURL! =====");
+    NSString *str = [NSString stringWithFormat:@"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=%d", 537516001];
+    NSLog(@"URL string:%@",str);
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
+}
+
+- (void)mailComposeController:(MFMailComposeViewController *)controller
+          didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error
+{
+    switch (result)
+    {
+        case MFMailComposeResultCancelled:
+            NSLog(@"Mail send canceled...");
+            break;
+        case MFMailComposeResultSaved:
+            NSLog(@"Mail saved...");
+            break;
+        case MFMailComposeResultSent:
+            NSLog(@"Mail sent...");
+            break;
+        case MFMailComposeResultFailed:
+            NSLog(@"Mail send errored: %@...", [error localizedDescription]);
+            break;
+        default:
+            break;
+    }
+    [self.tableView reloadData];
+    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
 
 /*

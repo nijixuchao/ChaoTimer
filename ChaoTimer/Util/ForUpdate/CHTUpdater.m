@@ -7,6 +7,8 @@
 //
 
 #import "CHTUpdater.h"
+#import "RubiksTimerDataProcessing.h"
+#import "RubiksTimerTimeObj.h"
 #import "CHTSessionManager.h"
 
 @implementation CHTUpdater
@@ -37,6 +39,7 @@
         CHTSession *defaultSession = [CHTSession initWithDefault];
         [CHTSessionManager saveSession:defaultSession];
     }
+    [sessionManager save];
     return sessionManager;
 }
 
@@ -60,14 +63,14 @@
             int timeValue = oldTime.timeValueBeforePenalty;
             int panelty = oldTime.penalty;
             CHTScramble *newScramble = [[CHTScramble alloc] init];
-            newScramble.type = oldTime.type;
-            newScramble.subType = @"";
+            newScramble.scrType = oldTime.type;
+            newScramble.scrSubType = @"";
             newScramble.scramble = oldTime.scramble;
             CHTSolve *newSolve = [CHTSolve newSolveWithTime:timeValue andPenalty:panelty andScramble:newScramble];
             [newTimeArray addObject:newSolve];
         }
         [newSession setSolves:newTimeArray];
-        newSession.currentType = oldSession.CurrentType;
+        //newSession.currentType = oldSession.CurrentType;
         [CHTSessionManager saveSession:newSession];
         //delete old session
         NSFileManager *fileManager = [NSFileManager defaultManager];

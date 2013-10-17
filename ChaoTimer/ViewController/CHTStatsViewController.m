@@ -11,11 +11,13 @@
 @interface CHTStatsViewController ()
 @property (nonatomic, strong) CHTSession *session;
 @property (nonatomic, strong) UIPopoverController *popoverController;
+@property (nonatomic, strong) CHTTheme *timerTheme;
 @end
 
 @implementation CHTStatsViewController
 @synthesize session = _session;
 @synthesize stats = _stats;
+@synthesize timerTheme;
 @synthesize popoverController;
 
 - (CHTSession *) session {
@@ -57,15 +59,8 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     NSLog(@"view will appear");
-    [self setTheme];
     [self reload];
     [super viewWillAppear:animated];
-}
-
-- (void) setTheme {
-    CHTTheme *timerTheme = [CHTTheme getTimerTheme];
-    [timerTheme setNavigationControllerTheme:self.navigationController];
-    [self.tabBarController.tabBar setBarTintColor: timerTheme.tabBarColor];
 }
 
 
@@ -104,6 +99,9 @@
     } else {
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
+    [cell.detailTextLabel setTextColor:[self.timerTheme getTintColor]];
+    [cell.textLabel setFont:[CHTTheme font:FONT_REGULAR iphoneSize:17.0f ipadSize:17.0f]];
+    [cell.detailTextLabel setFont:[CHTTheme font:FONT_LIGHT iphoneSize:17.0f ipadSize:17.0f]];
     return cell;
 }
 
@@ -142,7 +140,7 @@
 - (void)reload{
     self.session = [[CHTSessionManager load] loadCurrentSession];
     int numberOfSolves = self.session.numberOfSolves;
-    [[[[[self tabBarController] tabBar] items] objectAtIndex:0] setBadgeValue:[NSString stringWithFormat:@"%d", numberOfSolves]];
+    [[self.tabBarController.tabBar.items objectAtIndex:0] setBadgeValue:[NSString stringWithFormat:@"%d", self.session.numberOfSolves]];
     [self.stats removeAllObjects];
     CHTOneStat *numOfSolves = [CHTOneStat initWithType:@"Number of solves: " Value:[NSString stringWithFormat:@"%d", self.session.numberOfSolves]];
         [self.stats addObject:numOfSolves];
@@ -249,6 +247,7 @@
             statDetailViewController.hidesBottomBarWhenPushed = YES;
             statDetailViewController.session = self.session;
             statDetailViewController.stat = [self.stats objectAtIndex:row];
+            statDetailViewController.row = row;
             switch (row) {
                 case 3:
                     // session avg

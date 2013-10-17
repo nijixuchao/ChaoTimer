@@ -20,6 +20,6 @@ typedef enum device {
 + (Device) getDevice;
 + (NSString *)escapeString: (NSString *)string;
 + (CGFloat) getScreenWidth;
-+ (CGFloat) calculateCellHeightWithText:(NSString *)text fontSize:(CGFloat)fontSize cellWidth:(CGFloat)width cellMargin:(CGFloat)margin;
++ (CGFloat) heightOfContent: (NSString *)content font:(UIFont *)font;
 + (UIImage *)imageWithColor:(UIColor *)color;
 @end

@@ -12,9 +12,8 @@
 
 @interface CHTSession : NSObject <NSCoding>
 @property (readonly) int numberOfSolves;
-@property (readonly) int bestTime;
-@property (readonly) int worstTime;
-@property (nonatomic, strong) NSString *currentType;
+@property (nonatomic) int currentType;
+@property (nonatomic) int currentSubType;
 @property (nonatomic, strong) NSString *sessionName;
 
 + (CHTSession *) initWithDefault;

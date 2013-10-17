@@ -29,4 +29,5 @@ typedef enum penaltyType {
 - (void) setTime: (int)newTimeBeforePenalty andPenalty: (PenaltyType)newPenalty;
 - (NSString *) getTimeStampString;
 + (CHTSolve *) newSolveWithTime: (int)newTime andPenalty:(PenaltyType)newPenalty andScramble: (CHTScramble *)newScramble;
+- (NSString *)getPenaltyAsString;
 @end

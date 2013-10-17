@@ -7,15 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "CHTSettings.h"
-#import "CHTSession.h"
-#import "CHTScramble.h"
-#import "CHTSolve.h"
-#import "CHTSessionManager.h"
-#import "CHTUtil.h"
-#import "CHTTheme.h"
-#import "CHTScramblePickerView.h"
-#import <mach/mach_time.h>
+
 
 typedef enum timerStatus {
     TIMER_IDLE = 0,

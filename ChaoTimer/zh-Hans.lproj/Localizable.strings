@@ -13,7 +13,7 @@
 "Timing" = "计时";
 "Help" = "帮助";
 "More" = "更多";
-"solve list" = "成绩列表：";
+"solve list" = "成绩列表";
 "setting" = "计时器设置";
 "scramble" = "打乱详情";
 "session" = "分组管理";
@@ -147,3 +147,4 @@
 "theme black" = "高端黑";
 "theme pink" = "脑残粉";
 "theme white" = "亮瞎白";
+"original time" = "原始成绩";

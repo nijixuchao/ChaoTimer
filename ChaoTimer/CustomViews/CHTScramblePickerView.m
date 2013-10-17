@@ -7,11 +7,14 @@
 //
 
 #import "CHTScramblePickerView.h"
+#import "CHTScrambler.h"
+
 #define componentCount 2
 #define typeComponent 0
 #define subsetComponent 1
 #define typeComponentWidth 110
-#define subsetComponentWidth 120
+#define subsetComponentWidth 150
+#define rowHeight 35.0f
 
 @interface CHTScramblePickerView ()
 
@@ -41,13 +44,13 @@
 }
 
 - (void)addPickerView {
-    self.selectedType = @"2x2";
-    self.selectedSubType = @"random state";
+    self.selectedType = 0;
+    self.selectedSubType = 0;
     NSBundle *bundle = [NSBundle mainBundle];
     NSURL *plistURL = [bundle URLForResource:@"scrambleTypes" withExtension:@"plist"];
     self.scrType = [NSDictionary dictionaryWithContentsOfURL:plistURL];
-    self.types = [self.scrType allKeys];
-    self.types= [self.types sortedArrayUsingSelector:@selector(compare:)];
+    self.types = [CHTScrambler scrambleTypes];
+    //self.types = [self.scrType allKeys];
     NSString *select = [self.types objectAtIndex:0];
     self.subsets = [self.scrType objectForKey:select];
     self.myPickerView = [[UIPickerView alloc] initWithFrame:CGRectMake(0, 0, 270, 300)];
@@ -95,6 +98,11 @@
     }
 }
 
+- (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component
+{
+    return rowHeight;
+}
+
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
     if (component == typeComponent) {
         NSString *selType = [types objectAtIndex:row];
@@ -103,10 +111,9 @@
         [pickerView selectRow:0 inComponent:subsetComponent animated:YES];
         [pickerView reloadComponent:subsetComponent];
     }
-    self.selectedType = [types objectAtIndex:[pickerView selectedRowInComponent:typeComponent]];
-    self.selectedSubType = [subsets objectAtIndex:[pickerView selectedRowInComponent:subsetComponent]];
-    NSLog(@"scramble type: %@, %@", self.selectedType, self.selectedSubType);
+    self.selectedType = [pickerView selectedRowInComponent:typeComponent];
+    self.selectedSubType = [pickerView selectedRowInComponent:subsetComponent];
+    NSLog(@"scramble type: %d, %d", self.selectedType, self.selectedSubType);
 }
-
 
 @end

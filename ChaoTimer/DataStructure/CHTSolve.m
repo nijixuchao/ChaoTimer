@@ -84,5 +84,17 @@
     return self;
 }
 
+- (NSString *)getPenaltyAsString {
+    switch (self.penalty) {
+        case PENALTY_NO_PENALTY:
+            return @"No Penalty";
+        case PENALTY_PLUS_2:
+            return @"+2";
+        case PENALTY_DNF:
+            return @"DNF";
+        default:
+            break;
+    }
+}
 
 @end

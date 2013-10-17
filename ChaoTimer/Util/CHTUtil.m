@@ -53,25 +53,23 @@
 
 + (CGFloat) getScreenWidth {
     CGFloat screenWidth;
-    if ([[UIApplication sharedApplication] statusBarOrientation] == UIDeviceOrientationPortrait || [[UIApplication sharedApplication] statusBarOrientation] == UIDeviceOrientationPortraitUpsideDown){
-        screenWidth = [UIScreen mainScreen].applicationFrame.size.width;
-    }
-    else{
-        screenWidth = [UIScreen mainScreen].applicationFrame.size.height;
+    screenWidth = [UIScreen mainScreen].applicationFrame.size.width;
+    NSLog(@"screen width = %f", screenWidth);
+    if (screenWidth == 748.0f) {
+        screenWidth = 1024.0f;
     }
     return screenWidth;
 }
 
-+ (CGFloat) calculateCellHeightWithText:(NSString *)text fontSize:(CGFloat)fontSize cellWidth:(CGFloat)width cellMargin:(CGFloat)margin {
-    // Get a CGSize for the width and, effectively, unlimited height
-    CGSize constraint = CGSizeMake(width - (margin * 2), 20000.0f);
-    // Get the size of the text given the CGSize we just made as a constraint
-    CGSize size = [text sizeWithFont:[UIFont systemFontOfSize:fontSize] constrainedToSize:constraint lineBreakMode:NSLineBreakByWordWrapping];
-    // Get the height of our measurement, with a minimum of 44 (standard cell size)
-    CGFloat height = MAX(size.height, 44.0f);
-    // return the height, with a bit of extra padding in
-    return height+ (margin* 2);
+
++ (CGFloat) heightOfContent: (NSString *)content font:(UIFont *)font
+{
+    NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:content attributes:@{
+     NSFontAttributeName: font}];
+    CGRect rect = [attributedText boundingRectWithSize:CGSizeMake( [self getScreenWidth] - 20, 44.0f * 7)options:NSStringDrawingUsesLineFragmentOrigin context:nil];
+    return rect.size.height + 20;
 }
+
 
 + (UIImage *)imageWithColor:(UIColor *)color
 {
