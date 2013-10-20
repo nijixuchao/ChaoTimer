@@ -148,3 +148,10 @@
 "theme pink" = "脑残粉";
 "theme white" = "亮瞎白";
 "original time" = "原始成绩";
+"newest time on" = "成绩列表排序";
+"top" = "逆序";
+"bottom" = "顺序";
+"solve subtitle" = "副标题";
+"time" = "时间";
+"scrStr" = "打乱";
+"type" = "类型";

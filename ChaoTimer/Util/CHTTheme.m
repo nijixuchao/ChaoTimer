@@ -31,7 +31,7 @@
             timerTheme.textColor = [UIColor blackColor];
             timerTheme.backgroundColor = [UIColor whiteColor];
             timerTheme.tabBarColor = timerTheme.navigationColor;
-            timerTheme.barItemColor = [UIColor blueColor];
+            timerTheme.barItemColor = [UIColor colorWithRed:0/255.0f green:122/255.0f blue:255/255.0f alpha:1];
             break;
         case THEME_RED:
             timerTheme.textColor = [UIColor whiteColor];
@@ -76,7 +76,7 @@
         [myApp setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
     }
     [[UINavigationBar appearance] setTitleTextAttributes:@{
-        NSFontAttributeName:[CHTTheme font:FONT_REGULAR iphoneSize:20.0f ipadSize:20.0f],
+        NSFontAttributeName:[CHTTheme font:FONT_REGULAR iphoneSize:22.0f ipadSize:22.0f],
         NSForegroundColorAttributeName: self.textColor}];
     [[UINavigationBar appearance] setBarTintColor:self.navigationColor];
     [[UINavigationBar appearance] setTintColor:self.barItemColor];
@@ -87,6 +87,15 @@
 }
 
 - (void) setNavigationControllerTheme: (UINavigationController *)controller {
+    UIApplication *myApp = [UIApplication sharedApplication];
+    if (myTheme == THEME_WHITE) {
+        [myApp setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
+    } else {
+        [myApp setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
+    }
+    [controller.navigationBar setTitleTextAttributes:@{
+            NSFontAttributeName:[CHTTheme font:FONT_REGULAR iphoneSize:22.0f ipadSize:22.0f],
+            NSForegroundColorAttributeName: self.textColor}];
     [controller.navigationBar setBarTintColor:self.navigationColor];
     [controller.navigationBar setTintColor:self.barItemColor];
 }
@@ -178,21 +187,21 @@
     if ([CHTUtil getDevice] == DEVICE_PHONE) {
         switch (style) {
             case FONT_BOLD:
-                return [UIFont fontWithName:@"Aleo-Bold" size:iphoneSize];
+                return [UIFont fontWithName:@"Avenir-Medium" size:iphoneSize];
             case FONT_LIGHT:
-                return [UIFont fontWithName:@"Aleo-Light" size:iphoneSize];
+                return [UIFont fontWithName:@"Avenir-Light" size:iphoneSize];
             case FONT_REGULAR:
-                return [UIFont fontWithName:@"Aleo-Regular" size:iphoneSize];
+                return [UIFont fontWithName:@"Avenir-Book" size:iphoneSize];
         }
     }
     else {
         switch (style) {
             case FONT_BOLD:
-                return [UIFont fontWithName:@"Aleo-Bold" size:ipadSize];
+                return [UIFont fontWithName:@"Avenir-Medium" size:ipadSize];
             case FONT_LIGHT:
-                return [UIFont fontWithName:@"Aleo-Light" size:ipadSize];
+                return [UIFont fontWithName:@"Avenir-Light" size:ipadSize];
             case FONT_REGULAR:
-                return [UIFont fontWithName:@"Aleo-Regular" size:ipadSize];
+                return [UIFont fontWithName:@"Avenir-Book" size:ipadSize];
         }
     }
 }

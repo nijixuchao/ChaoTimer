@@ -48,7 +48,7 @@
 }
 
 - (NSString *) getTimeStampString {
-    NSString *dateString = [NSDateFormatter localizedStringFromDate:self.timeStamp dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterShortStyle];
+    NSString *dateString = [NSDateFormatter localizedStringFromDate:self.timeStamp dateStyle:NSDateFormatterMediumStyle timeStyle:NSDateFormatterMediumStyle];
     return dateString;
     
 }

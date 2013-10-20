@@ -49,8 +49,8 @@
     self.sessionManager = [CHTSessionManager load];
     if ([CHTUtil getDevice] == DEVICE_PAD) {
         [self.navigationController.navigationBar setTintColor:[UIColor blackColor]];
-        [[UINavigationBar appearance] setTitleTextAttributes:@{
-          NSFontAttributeName:[CHTTheme font:FONT_REGULAR iphoneSize:20.0f ipadSize:20.0f],
+        [self.navigationController.navigationBar setTitleTextAttributes:@{
+          NSFontAttributeName:[CHTTheme font:FONT_REGULAR iphoneSize:22.0f ipadSize:22.0f],
         NSForegroundColorAttributeName: [UIColor blackColor]}];
     }
     [self.tableView reloadData];
@@ -135,8 +135,10 @@
         default:
             break;
     }
-    [cell.textLabel setFont:[CHTTheme font:FONT_REGULAR iphoneSize:17.0f ipadSize:17.0f]];
+    [cell.textLabel setFont:[CHTTheme font:FONT_REGULAR iphoneSize:18.0f ipadSize:18.0f]];
     [cell.detailTextLabel setFont:[CHTTheme font:FONT_LIGHT iphoneSize:12.0f ipadSize:12.0f]];
+    
+    [cell.detailTextLabel setTextColor:[UIColor darkGrayColor]];
     return cell;
 }
 

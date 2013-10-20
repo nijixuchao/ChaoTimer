@@ -8,6 +8,10 @@
 
 #import "CHTMoreViewController.h"
 
+#import "CHTUtil.h"
+#import "CHTTheme.h"
+#import "CHTThemeViewController.h"
+#import "CHTSettingViewController.h"
 
 @interface CHTMoreViewController ()
 @property (nonatomic, strong) CHTTheme *timerTheme;
@@ -49,6 +53,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [self.tableView reloadData];
+    self.timerTheme = [CHTTheme getTimerTheme];
     [super viewWillAppear:animated];
 }
 
@@ -141,8 +146,8 @@
             break;
     }
     [cell.detailTextLabel setTextColor:[timerTheme getTintColor]];
-    [cell.textLabel setFont:[CHTTheme font:FONT_REGULAR iphoneSize:17.0f ipadSize:17.0f]];
-    [cell.detailTextLabel setFont:[CHTTheme font:FONT_LIGHT iphoneSize:17.0f ipadSize:17.0f]];
+    [cell.textLabel setFont:[CHTTheme font:FONT_REGULAR iphoneSize:18.0f ipadSize:18.0f]];
+    [cell.detailTextLabel setFont:[CHTTheme font:FONT_LIGHT iphoneSize:18.0f ipadSize:18.0f]];
     return cell;
 }
 
@@ -161,7 +166,9 @@
                     [self.navigationController pushViewController:themeViewController animated:YES];
                     break;
                 }
-                    
+                case 1:
+                    [self pushToSettingView];
+                    break;
                 default:
                     break;
             }
@@ -186,9 +193,15 @@
     }
 }
 
+- (IBAction) pushToSettingView {
+    CHTSettingViewController *settingViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"setting"];
+    [self.navigationController pushViewController:settingViewController animated:YES];
+}
+
 - (IBAction) tellFriends {
     MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
     mc.mailComposeDelegate = self;
+    [self.timerTheme setNavigationControllerTheme:mc.navigationController];
     [mc setSubject:[CHTUtil getLocalizedString:@"mailSubject"]];
     [mc setMessageBody:[CHTUtil getLocalizedString:@"mailBody"] isHTML:YES];
     [mc setModalPresentationStyle:UIModalPresentationFormSheet];
@@ -198,8 +211,9 @@
 - (IBAction) sendFeedback {
     MFMailComposeViewController *mc = [[MFMailComposeViewController alloc] init];
     mc.mailComposeDelegate = self;
+    [self.timerTheme setNavigationControllerTheme:mc.navigationController];
     [mc setSubject:@"Feedback of ChaoTimer"];
-    [mc setToRecipients:[NSArray arrayWithObjects:@"nijixuchao@gmail.com", nil]];
+    [mc setToRecipients:[NSArray arrayWithObjects:@"chaotimer.feedback@gmail.com", nil]];
     [mc setModalPresentationStyle:UIModalPresentationFormSheet];
     [self presentViewController:mc animated:YES completion:nil];
 }

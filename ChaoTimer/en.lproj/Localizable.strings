@@ -10,7 +10,7 @@
 "Stats" = "Stats";
 "Detail" = "Detail";
 "Gestures Help" = "Gestures Help";
-"Timing" = "Timing";
+"Timing" = "Timer";
 "Help" = "Help";
 "More" = "More";
 "solve list" = "Solve List";
@@ -133,7 +133,7 @@
 "never remind" = "Never Remind";
 "dup warning" = "Name duplicated";
 "choose another name" = "Please choose another name";
-"start freeze" = "Timer start delay time";
+"start freeze" = "Freezing Time";
 "15 sec" = "15 seconds";
 "no other gesture" = " (No other gestures)";
 "theme" = "Theme";
@@ -146,3 +146,10 @@
 "theme pink" = "Pink";
 "theme white" = "White";
 "original time" = "Original Time";
+"newest time on" = "Newest Time on";
+"top" = "Top";
+"bottom" = "Bottom";
+"solve subtitle" = "Subtitle";
+"time" = "Time";
+"scrStr" = "Scramble";
+"type" = "Type";

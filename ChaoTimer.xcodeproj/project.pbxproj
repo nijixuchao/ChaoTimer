@@ -58,15 +58,6 @@
 		0CE9484217FCF17E00FB770C /* CHTStatsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CE9484117FCF17E00FB770C /* CHTStatsViewController.m */; };
 		0CE9484517FD184D00FB770C /* CHTSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CE9484417FD184D00FB770C /* CHTSessionManager.m */; };
 		0CEB9A9B180E33580064182B /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CEB9A9A180E33580064182B /* MessageUI.framework */; };
-		0CEB9AA1180F5B910064182B /* Aleo-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 0CEB9A9E180F5B910064182B /* Aleo-Bold.otf */; };
-		0CEB9AA2180F5B910064182B /* Aleo-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = 0CEB9A9F180F5B910064182B /* Aleo-Light.otf */; };
-		0CEB9AA3180F5B910064182B /* Aleo-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 0CEB9AA0180F5B910064182B /* Aleo-Regular.otf */; };
-		0CEB9AE8180FAC4B0064182B /* lanscape_non_retina.png in Resources */ = {isa = PBXBuildFile; fileRef = 0CEB9AE2180FAC4B0064182B /* lanscape_non_retina.png */; };
-		0CEB9AE9180FAC4B0064182B /* lanscape_retina.png in Resources */ = {isa = PBXBuildFile; fileRef = 0CEB9AE3180FAC4B0064182B /* lanscape_retina.png */; };
-		0CEB9AEA180FAC4B0064182B /* portrait_retina.png in Resources */ = {isa = PBXBuildFile; fileRef = 0CEB9AE4180FAC4B0064182B /* portrait_retina.png */; };
-		0CEB9AEB180FAC4B0064182B /* protrait_non_retina.png in Resources */ = {isa = PBXBuildFile; fileRef = 0CEB9AE5180FAC4B0064182B /* protrait_non_retina.png */; };
-		0CEB9AEC180FAC4B0064182B /* retina_4inch.png in Resources */ = {isa = PBXBuildFile; fileRef = 0CEB9AE6180FAC4B0064182B /* retina_4inch.png */; };
-		0CEB9AED180FAC4B0064182B /* retina.png in Resources */ = {isa = PBXBuildFile; fileRef = 0CEB9AE7180FAC4B0064182B /* retina.png */; };
 		0CEB9AF5180FAC640064182B /* icon_29.png in Resources */ = {isa = PBXBuildFile; fileRef = 0CEB9AEE180FAC640064182B /* icon_29.png */; };
 		0CEB9AF6180FAC640064182B /* icon_40.png in Resources */ = {isa = PBXBuildFile; fileRef = 0CEB9AEF180FAC640064182B /* icon_40.png */; };
 		0CEB9AF7180FAC640064182B /* icon_58.png in Resources */ = {isa = PBXBuildFile; fileRef = 0CEB9AF0180FAC640064182B /* icon_58.png */; };
@@ -107,6 +98,13 @@
 		0CEB9B3A180FACB90064182B /* timing.png in Resources */ = {isa = PBXBuildFile; fileRef = 0CEB9B2A180FACB90064182B /* timing.png */; };
 		0CEB9B3B180FACB90064182B /* version.png in Resources */ = {isa = PBXBuildFile; fileRef = 0CEB9B2B180FACB90064182B /* version.png */; };
 		0CEB9B3D180FAD120064182B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0CEB9B3C180FAD120064182B /* Images.xcassets */; };
+		0CF23CD31810D45600BAEB40 /* CHTSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CF23CD21810D45600BAEB40 /* CHTSettingViewController.m */; };
+		0CF23CD51810E62500BAEB40 /* retina.png in Resources */ = {isa = PBXBuildFile; fileRef = 0CF23CD41810E62500BAEB40 /* retina.png */; };
+		0CF23CDB1810E80D00BAEB40 /* lanscape_non_retina.png in Resources */ = {isa = PBXBuildFile; fileRef = 0CF23CD61810E80D00BAEB40 /* lanscape_non_retina.png */; };
+		0CF23CDC1810E80D00BAEB40 /* lanscape_retina.png in Resources */ = {isa = PBXBuildFile; fileRef = 0CF23CD71810E80D00BAEB40 /* lanscape_retina.png */; };
+		0CF23CDD1810E80D00BAEB40 /* portrait_retina.png in Resources */ = {isa = PBXBuildFile; fileRef = 0CF23CD81810E80D00BAEB40 /* portrait_retina.png */; };
+		0CF23CDE1810E80D00BAEB40 /* protrait_non_retina.png in Resources */ = {isa = PBXBuildFile; fileRef = 0CF23CD91810E80D00BAEB40 /* protrait_non_retina.png */; };
+		0CF23CDF1810E80D00BAEB40 /* retina_4inch.png in Resources */ = {isa = PBXBuildFile; fileRef = 0CF23CDA1810E80D00BAEB40 /* retina_4inch.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -204,15 +202,6 @@
 		0CE9484317FD184D00FB770C /* CHTSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHTSessionManager.h; sourceTree = "<group>"; };
 		0CE9484417FD184D00FB770C /* CHTSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHTSessionManager.m; sourceTree = "<group>"; };
 		0CEB9A9A180E33580064182B /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
-		0CEB9A9E180F5B910064182B /* Aleo-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Aleo-Bold.otf"; sourceTree = "<group>"; };
-		0CEB9A9F180F5B910064182B /* Aleo-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Aleo-Light.otf"; sourceTree = "<group>"; };
-		0CEB9AA0180F5B910064182B /* Aleo-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Aleo-Regular.otf"; sourceTree = "<group>"; };
-		0CEB9AE2180FAC4B0064182B /* lanscape_non_retina.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lanscape_non_retina.png; sourceTree = "<group>"; };
-		0CEB9AE3180FAC4B0064182B /* lanscape_retina.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lanscape_retina.png; sourceTree = "<group>"; };
-		0CEB9AE4180FAC4B0064182B /* portrait_retina.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = portrait_retina.png; sourceTree = "<group>"; };
-		0CEB9AE5180FAC4B0064182B /* protrait_non_retina.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = protrait_non_retina.png; sourceTree = "<group>"; };
-		0CEB9AE6180FAC4B0064182B /* retina_4inch.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = retina_4inch.png; sourceTree = "<group>"; };
-		0CEB9AE7180FAC4B0064182B /* retina.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = retina.png; sourceTree = "<group>"; };
 		0CEB9AEE180FAC640064182B /* icon_29.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_29.png; sourceTree = "<group>"; };
 		0CEB9AEF180FAC640064182B /* icon_40.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_40.png; sourceTree = "<group>"; };
 		0CEB9AF0180FAC640064182B /* icon_58.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_58.png; sourceTree = "<group>"; };
@@ -253,6 +242,14 @@
 		0CEB9B2A180FACB90064182B /* timing.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = timing.png; sourceTree = "<group>"; };
 		0CEB9B2B180FACB90064182B /* version.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = version.png; sourceTree = "<group>"; };
 		0CEB9B3C180FAD120064182B /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		0CF23CD11810D45600BAEB40 /* CHTSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHTSettingViewController.h; sourceTree = "<group>"; };
+		0CF23CD21810D45600BAEB40 /* CHTSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHTSettingViewController.m; sourceTree = "<group>"; };
+		0CF23CD41810E62500BAEB40 /* retina.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = retina.png; sourceTree = "<group>"; };
+		0CF23CD61810E80D00BAEB40 /* lanscape_non_retina.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lanscape_non_retina.png; sourceTree = "<group>"; };
+		0CF23CD71810E80D00BAEB40 /* lanscape_retina.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lanscape_retina.png; sourceTree = "<group>"; };
+		0CF23CD81810E80D00BAEB40 /* portrait_retina.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = portrait_retina.png; sourceTree = "<group>"; };
+		0CF23CD91810E80D00BAEB40 /* protrait_non_retina.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = protrait_non_retina.png; sourceTree = "<group>"; };
+		0CF23CDA1810E80D00BAEB40 /* retina_4inch.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = retina_4inch.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -396,6 +393,8 @@
 				0CE9482617FA7E8100FB770C /* CHTMoreViewController.m */,
 				0C24866D1801224000209767 /* CHTThemeViewController.h */,
 				0C24866E1801224100209767 /* CHTThemeViewController.m */,
+				0CF23CD11810D45600BAEB40 /* CHTSettingViewController.h */,
+				0CF23CD21810D45600BAEB40 /* CHTSettingViewController.m */,
 			);
 			name = ViewController;
 			path = /Users/nijixuchao/Developer/ChaoTimer/ChaoTimer/ViewController;
@@ -411,12 +410,12 @@
 				0CEB9AF2180FAC640064182B /* icon_80.png */,
 				0CEB9AF3180FAC640064182B /* icon_120.png */,
 				0CEB9AF4180FAC640064182B /* icon_152.png */,
-				0CEB9AE2180FAC4B0064182B /* lanscape_non_retina.png */,
-				0CEB9AE3180FAC4B0064182B /* lanscape_retina.png */,
-				0CEB9AE4180FAC4B0064182B /* portrait_retina.png */,
-				0CEB9AE5180FAC4B0064182B /* protrait_non_retina.png */,
-				0CEB9AE6180FAC4B0064182B /* retina_4inch.png */,
-				0CEB9AE7180FAC4B0064182B /* retina.png */,
+				0CF23CD61810E80D00BAEB40 /* lanscape_non_retina.png */,
+				0CF23CD71810E80D00BAEB40 /* lanscape_retina.png */,
+				0CF23CD81810E80D00BAEB40 /* portrait_retina.png */,
+				0CF23CD91810E80D00BAEB40 /* protrait_non_retina.png */,
+				0CF23CDA1810E80D00BAEB40 /* retina_4inch.png */,
+				0CF23CD41810E62500BAEB40 /* retina.png */,
 				0CEB9B1C180FACB90064182B /* back.png */,
 				0CEB9B1D180FACB90064182B /* feedback.png */,
 				0CEB9B1E180FACB90064182B /* help.png */,
@@ -449,9 +448,6 @@
 				0CEB9B09180FAC730064182B /* theme@2x.png */,
 				0CEB9B0A180FAC730064182B /* timing@2x.png */,
 				0CEB9B0B180FAC730064182B /* version@2x.png */,
-				0CEB9A9E180F5B910064182B /* Aleo-Bold.otf */,
-				0CEB9A9F180F5B910064182B /* Aleo-Light.otf */,
-				0CEB9AA0180F5B910064182B /* Aleo-Regular.otf */,
 			);
 			name = Resource;
 			path = /Users/nijixuchao/Developer/ChaoTimer/ChaoTimer/Resource;
@@ -585,6 +581,7 @@
 				0CEB9B32180FACB90064182B /* session.png in Resources */,
 				0C2FA6E617B1E37F00A006B5 /* InfoPlist.strings in Resources */,
 				0CEB9AF7180FAC640064182B /* icon_58.png in Resources */,
+				0CF23CDC1810E80D00BAEB40 /* lanscape_retina.png in Resources */,
 				0CEB9B10180FAC730064182B /* more@2x.png in Resources */,
 				0CEB9B2E180FACB90064182B /* help.png in Resources */,
 				0CEB9B39180FACB90064182B /* theme.png in Resources */,
@@ -593,15 +590,18 @@
 				0CEB9B1A180FAC730064182B /* timing@2x.png in Resources */,
 				0CEB9B14180FAC730064182B /* setting@2x.png in Resources */,
 				0CEB9B36180FACB90064182B /* stats.png in Resources */,
+				0CF23CDE1810E80D00BAEB40 /* protrait_non_retina.png in Resources */,
 				0CEB9B0D180FAC730064182B /* feedback@2x.png in Resources */,
 				0C2FA6F517B1E37F00A006B5 /* MainStoryboard_iPhone.storyboard in Resources */,
 				0CEB9B17180FAC730064182B /* sticky@2x.png in Resources */,
+				0CF23CD51810E62500BAEB40 /* retina.png in Resources */,
 				0CEB9B34180FACB90064182B /* setting.png in Resources */,
 				0CEB9B15180FAC730064182B /* space@2x.png in Resources */,
 				0CEB9B3A180FACB90064182B /* timing.png in Resources */,
+				0CF23CDD1810E80D00BAEB40 /* portrait_retina.png in Resources */,
+				0CF23CDF1810E80D00BAEB40 /* retina_4inch.png in Resources */,
 				0CEB9B2F180FACB90064182B /* mainSession.png in Resources */,
 				0CEB9B0E180FAC730064182B /* help@2x.png in Resources */,
-				0CEB9AE9180FAC4B0064182B /* lanscape_retina.png in Resources */,
 				0CE7D6C518063737008989B3 /* README.md in Resources */,
 				0CEB9AFA180FAC640064182B /* icon_120.png in Resources */,
 				0CEB9B3B180FACB90064182B /* version.png in Resources */,
@@ -609,30 +609,23 @@
 				0CEB9B3D180FAD120064182B /* Images.xcassets in Resources */,
 				0CEB9B11180FAC730064182B /* rate@2x.png in Resources */,
 				0CEB9B13180FAC730064182B /* sessions@2x.png in Resources */,
-				0CEB9AEA180FAC4B0064182B /* portrait_retina.png in Resources */,
 				0CEB9B12180FAC730064182B /* session@2x.png in Resources */,
 				0C2FA6F817B1E37F00A006B5 /* MainStoryboard_iPad.storyboard in Resources */,
 				0CEB9AF6180FAC640064182B /* icon_40.png in Resources */,
-				0CEB9AEC180FAC4B0064182B /* retina_4inch.png in Resources */,
-				0CEB9AE8180FAC4B0064182B /* lanscape_non_retina.png in Resources */,
 				0CEB9B0F180FAC730064182B /* mainSession@2x.png in Resources */,
 				0CEB9AFB180FAC640064182B /* icon_152.png in Resources */,
 				0C248694180234CC00209767 /* scrambleTypes.plist in Resources */,
-				0CEB9AA1180F5B910064182B /* Aleo-Bold.otf in Resources */,
 				0CEB9B2D180FACB90064182B /* feedback.png in Resources */,
 				0CEB9B33180FACB90064182B /* sessions.png in Resources */,
 				0CEB9B16180FAC730064182B /* stats@2x.png in Resources */,
 				0CEB9B0C180FAC730064182B /* back@2x.png in Resources */,
 				0CEB9AF9180FAC640064182B /* icon_80.png in Resources */,
-				0CEB9AA2180F5B910064182B /* Aleo-Light.otf in Resources */,
 				0CEB9B35180FACB90064182B /* space.png in Resources */,
 				0CEB9B2C180FACB90064182B /* back.png in Resources */,
-				0CEB9AEB180FAC4B0064182B /* protrait_non_retina.png in Resources */,
 				0CEB9B37180FACB90064182B /* sticky.png in Resources */,
 				0CEB9B38180FACB90064182B /* tell_friends.png in Resources */,
-				0CEB9AA3180F5B910064182B /* Aleo-Regular.otf in Resources */,
 				0CEB9AF8180FAC640064182B /* icon_76.png in Resources */,
-				0CEB9AED180FAC4B0064182B /* retina.png in Resources */,
+				0CF23CDB1810E80D00BAEB40 /* lanscape_non_retina.png in Resources */,
 				0CEB9B1B180FAC730064182B /* version@2x.png in Resources */,
 				0CEB9B19180FAC730064182B /* theme@2x.png in Resources */,
 			);
@@ -647,6 +640,7 @@
 			files = (
 				0CE7D6E618064557008989B3 /* Gear.m in Sources */,
 				0CE9482717FA7E8100FB770C /* CHTMoreViewController.m in Sources */,
+				0CF23CD31810D45600BAEB40 /* CHTSettingViewController.m in Sources */,
 				0CE7D6C418063737008989B3 /* CubieCube.m in Sources */,
 				0CE42B9917EAB21E006C8FAD /* CHTSettings.m in Sources */,
 				0CE7D6DC18063950008989B3 /* Megaminx.m in Sources */,

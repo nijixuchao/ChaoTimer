@@ -73,7 +73,7 @@
     } else {
         [cell setAccessoryType:UITableViewCellAccessoryNone];
     }
-    [cell.textLabel setFont:[CHTTheme font:FONT_REGULAR iphoneSize:17.0f ipadSize:17.0f]];
+    [cell.textLabel setFont:[CHTTheme font:FONT_REGULAR iphoneSize:18.0f ipadSize:18.0f]];
     return cell;
 }
 

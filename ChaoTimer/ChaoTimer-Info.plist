@@ -28,12 +28,6 @@
 	<string>1309</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>UIAppFonts</key>
-	<array>
-		<string>Aleo-Light.otf</string>
-		<string>Aleo-Bold.otf</string>
-		<string>Aleo-Regular.otf</string>
-	</array>
 	<key>UIFileSharingEnabled</key>
 	<true/>
 	<key>UIMainStoryboardFile</key>

@@ -18,7 +18,12 @@
 #import "CHTScrambler.h"
 #import <mach/mach_time.h>
 
+
+#define TAG_ALERT_DELETE_LAST_SOLVE 1
+#define TAG_ALERT_CLEAR_SESSION 2
+#define TAG_ALERT_ADD_PANELTY 3
 #define TAG_ALERT_CHANGE_SCRAMBLE_TYPE 4
+#define TAG_ALERT_RATE_ME 5
 
 @interface CHTTimingViewController ()
 @property (nonatomic) TimerStatus timerStatus;
@@ -31,6 +36,8 @@
 @property (nonatomic, strong) CHTScramble *thisScramble;
 @property (nonatomic, strong) CHTScramble *nextScramble;
 @property (nonatomic, strong) CHTScramblePickerView *pickerView;
+@property NSTimer *inspectionTimer;
+@property NSTimer *inspectionOverTimeTimer;
 @end
 
 @implementation CHTTimingViewController
@@ -43,6 +50,9 @@
 @synthesize thisScramble = _thisScramble;
 @synthesize nextScramble = _nextScramble;
 @synthesize pickerView;
+@synthesize inspectionTimer;
+@synthesize inspectionOverTimeTimer;
+
 BOOL wcaInspection;
 BOOL inspectionBegin;
 BOOL plus2;
@@ -50,6 +60,7 @@ int scrType;
 int scrSubType;
 int oldScrType;
 int oldScrSubType;
+int solvedTimes;
 
 - (CHTSession *) session {
     if (!_session) {
@@ -71,11 +82,12 @@ int oldScrSubType;
     [myApp setIdleTimerDisabled:YES];
     [myApp setStatusBarHidden:NO withAnimation:NO];
     
-    longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(startTimer:)];
-    [longPressGesture setAllowableMovement:50];
-    [self setFreezeTime];
-    [self.view addGestureRecognizer:longPressGesture];
+    self.longPressGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(startTimer:)];
+    [self.longPressGesture setAllowableMovement:50];
+    [self.longPressGesture setMinimumPressDuration:[CHTSettings getFreezeTime] * 0.01];
+    [self.view addGestureRecognizer:self.longPressGesture];
     [self setupGestures];
+    self.timerStatus = TIMER_IDLE;
     [[[[[self tabBarController] tabBar] items] objectAtIndex:0] setTitle:[CHTUtil getLocalizedString:@"Timing"]];
     [[[[[self tabBarController] tabBar] items] objectAtIndex:1] setTitle:[CHTUtil getLocalizedString:@"Stats"]];
     [[[[[self tabBarController] tabBar] items] objectAtIndex:2] setTitle:[CHTUtil getLocalizedString:@"Help"]];
@@ -96,7 +108,7 @@ int oldScrSubType;
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [self setFreezeTime];
+    [self.longPressGesture setMinimumPressDuration:[CHTSettings getFreezeTime] * 0.01];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -111,6 +123,8 @@ int oldScrSubType;
         oldScrType = self.session.currentType;
         oldScrSubType = self.session.currentSubType;
     }
+    wcaInspection = [CHTSettings getSavedBool:@"wcaInspection"];
+    solvedTimes = [CHTSettings getSavedInt:@"solvedTimes"];
 }
 
 
@@ -140,32 +154,28 @@ int oldScrSubType;
     [self.timeLabel setTextColor:self.timerTheme.textColor];
 }
 
-- (void) setFreezeTime
-{
-    [longPressGesture setMinimumPressDuration:[CHTSettings getFreezeTime] * 0.01];
-}
 
 - (void) setupGestures
 {
     UISwipeGestureRecognizer *swipeGestureLeft = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(deleteLastSolve:)];
     [swipeGestureLeft setDirection:UISwipeGestureRecognizerDirectionLeft];
-    [swipeGestureLeft requireGestureRecognizerToFail:longPressGesture];
+    [swipeGestureLeft requireGestureRecognizerToFail:self.longPressGesture];
     [self.view addGestureRecognizer:swipeGestureLeft];
     
     UISwipeGestureRecognizer *swipeGestureRight = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(getNewScramble:)];
     [swipeGestureRight setDirection:UISwipeGestureRecognizerDirectionRight];
-    [swipeGestureRight requireGestureRecognizerToFail:longPressGesture];
+    [swipeGestureRight requireGestureRecognizerToFail:self.longPressGesture];
     [self.view addGestureRecognizer:swipeGestureRight];
     
     //UISwipeGestureRecognizer *swipeGestureUp = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(displayScrambleImage:)];
     UISwipeGestureRecognizer *swipeGestureUp = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(resetTimerStatus:)];
     [swipeGestureUp setDirection:UISwipeGestureRecognizerDirectionUp];
-    [swipeGestureUp requireGestureRecognizerToFail:longPressGesture];
+    [swipeGestureUp requireGestureRecognizerToFail:self.longPressGesture];
     [self.view addGestureRecognizer:swipeGestureUp];
     
     UISwipeGestureRecognizer *swipeGestureDown = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(resetTimerStatus:)];
     [swipeGestureDown setDirection:UISwipeGestureRecognizerDirectionDown];
-    [swipeGestureDown requireGestureRecognizerToFail:longPressGesture];
+    [swipeGestureDown requireGestureRecognizerToFail:self.longPressGesture];
     [self.view addGestureRecognizer:swipeGestureDown];
     
     UITapGestureRecognizer *singleFingerDoubleTaps = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(addPenalty:)];
@@ -185,7 +195,7 @@ int oldScrSubType;
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    //NSLog(@"touch begin.");
+    NSLog(@"touch begin.");
     [super touchesBegan:touches withEvent:event];
     if  (self.timerStatus == TIMER_IDLE) {
         [self.timeLabel setTextColor:[UIColor redColor]];
@@ -196,6 +206,7 @@ int oldScrSubType;
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+    NSLog(@"touch ended.");
     [super touchesEnded:touches withEvent:event];
     if (self.timerStatus == TIMER_FREEZE) {
         self.timerStatus = TIMER_IDLE;
@@ -204,7 +215,7 @@ int oldScrSubType;
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
-    //NSLog(@"touch cancel.");
+    NSLog(@"touch cancel.");
     [super touchesBegan:touches withEvent:event];
     if  (self.timerStatus == TIMER_FREEZE) {
         self.timerStatus = TIMER_IDLE;
@@ -222,7 +233,7 @@ int oldScrSubType;
 }
 
 - (IBAction)startTimer:(UILongPressGestureRecognizer *)sender {
-    //if (!wcaInspection) {
+    if (!wcaInspection) {
         if (sender.state == UIGestureRecognizerStateBegan) {
             if (self.timerStatus == TIMER_FREEZE) {
                 [self.timeLabel setTextColor:[UIColor greenColor]];
@@ -243,27 +254,27 @@ int oldScrSubType;
                 //[self hideTabBar:YES];
             }
         }
-    /*}
+    }
     else {
         if (inspectionBegin) {
             if (sender.state == UIGestureRecognizerStateBegan) {
-                if (self.timerStatus == 5) {
-                    self.timerDisplay.textColor = [UIColor greenColor];
-                    self.timerStatus = 2;
+                if (self.timerStatus == TIMER_INSPECT) {
+                    self.timeLabel.textColor = [UIColor greenColor];
+                    self.timerStatus = TIMER_READY;
                 }
             }
             if (sender.state == UIGestureRecognizerStateCancelled) {
-                self.timerDisplay.textColor = [UIColor redColor];
-                self.timerStatus = 5;
+                self.timeLabel.textColor = [UIColor redColor];
+                self.timerStatus = TIMER_INSPECT;
             }
             else if (sender.state == UIGestureRecognizerStateEnded) {
-                if (self.timerStatus == 2) {
-                    self.timerDisplay.textColor = self.timerTheme.textColor;
-                    self.timerDisplay.text = @"0.000";
+                if (self.timerStatus == TIMER_READY) {
+                    self.timeLabel.textColor = self.timerTheme.textColor;
+                    self.timeLabel.text = @"0.000";
                     self.timeWhenTimerStart = mach_absolute_time();
                     self.time = 0;
                     self.myTimer = [NSTimer scheduledTimerWithTimeInterval:0.001 target:self selector:@selector(updateTime) userInfo:nil repeats:YES];
-                    self.timerStatus = 3;
+                    self.timerStatus = TIMER_TIMING;
                     inspectionBegin = NO;
                     //[self hideTabBar:YES];
                 }
@@ -272,23 +283,23 @@ int oldScrSubType;
         else {
             if (sender.state == UIGestureRecognizerStateBegan) {
                 NSLog(@"start touch began.");
-                if (self.timerStatus == 1) {
-                    self.timerDisplay.textColor = [UIColor greenColor];
-                    self.timerStatus = 2;
+                if (self.timerStatus == TIMER_FREEZE) {
+                    self.timeLabel.textColor = [UIColor greenColor];
+                    self.timerStatus = TIMER_READY;
                 }
             }
             if (sender.state == UIGestureRecognizerStateCancelled) {
                 NSLog(@"start touch cancel.");
-                self.timerDisplay.textColor = self.timerTheme.textColor;
-                self.timerStatus = 0;
+                self.timeLabel.textColor = self.timerTheme.textColor;
+                self.timerStatus = TIMER_IDLE;
             }
             else if (sender.state == UIGestureRecognizerStateEnded) {
                 NSLog(@"start touch end.");
-                if (self.timerStatus == 2) {
-                    self.timerDisplay.textColor = self.timerTheme.textColor;
-                    self.timerDisplay.text = @"15";
+                if (self.timerStatus == TIMER_READY) {
+                    self.timeLabel.textColor = self.timerTheme.textColor;
+                    self.timeLabel.text = @"15";
                     self.inspectionTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(updateInspectionTime) userInfo:nil repeats:YES];
-                    self.timerStatus = 5;
+                    self.timerStatus = TIMER_INSPECT;
                     inspectionBegin = YES;
                     //[self hideTabBar:YES];
                 }
@@ -296,13 +307,42 @@ int oldScrSubType;
             
         }
         
-    }*/
+    }
+}
+
+- (void)updateInspectionTime{
+    self.timeLabel.text = [NSString stringWithFormat:@"%d", ([self.timeLabel.text intValue] - 1)];
+    if ([self.timeLabel.text isEqualToString:@"1"]) {
+        [self.inspectionTimer invalidate];
+        self.inspectionOverTimeTimer = [NSTimer scheduledTimerWithTimeInterval:2 target:self selector:@selector(updateInspectionOverTimeTimer) userInfo:nil repeats:YES];
+    }
+}
+
+- (void)updateInspectionOverTimeTimer {
+    if ([self.timeLabel.text isEqualToString:@"1"]) {
+        self.timeLabel.text = @"+2";
+        plus2 = YES;
+        return;
+    }
+    if ([self.timeLabel.text isEqualToString:@"+2"]) {
+        plus2 = NO;
+        self.timeLabel.text = @"DNF";
+        [self.inspectionOverTimeTimer invalidate];
+        self.timerStatus = TIMER_IDLE;
+        inspectionBegin = NO;
+        [self.session addSolve:0 withPenalty:PENALTY_DNF scramble:self.thisScramble];
+        [CHTSessionManager saveSession:self.session];
+        self.tabBarItem.badgeValue = [NSString stringWithFormat:@"%d", self.session.numberOfSolves];
+        [self displayNextScramble];
+    }
 }
 
 - (void)stopTimer{
     if (self.timerStatus == TIMER_TIMING) {
+        if (self.time == 0)
+            return;
         [self.myTimer invalidate];
-        //[self.inspectionTimer invalidate];
+        [self.inspectionTimer invalidate];
         self.timerStatus = TIMER_IDLE;
         inspectionBegin = NO;
         if (!plus2) {
@@ -316,31 +356,24 @@ int oldScrSubType;
         [CHTSessionManager saveSession:self.session];
         self.tabBarItem.badgeValue = [NSString stringWithFormat:@"%d", self.session.numberOfSolves];
         [self displayNextScramble];
-        /*
-        self.thisScramble = self.nextScramble;
-        //self.thisScramble = [self.scrambler generateScrambleString:self.scrambleType];
-        NSLog(@"this: %@", self.thisScramble);
-        self.scrambleDisplay.text = self.thisScramble;
         
-        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         solvedTimes++;
-        BOOL ifRated = [defaults boolForKey:@"ifRated"];
+        BOOL ifRated = [CHTSettings getSavedBool:@"ifRated"];
         if (solvedTimes >= 100) {
             solvedTimes = 0;
             if (!ifRated) {
-                UIAlertView *rateAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"rateTitle", NULL) message:NSLocalizedString(@"rateBody", NULL) delegate:self cancelButtonTitle:NSLocalizedString(@"remind later", NULL) otherButtonTitles:NSLocalizedString(@"remind now", NULL), NSLocalizedString(@"never remind", NULL) , nil];
-                [rateAlert setTag:6];
+                UIAlertView *rateAlert = [[UIAlertView alloc]
+                    initWithTitle:[CHTUtil getLocalizedString:@"rateTitle" ]
+                    message:[CHTUtil getLocalizedString:@"rateBody"]
+                    delegate:self
+                    cancelButtonTitle:[CHTUtil getLocalizedString:@"remind later"]
+                    otherButtonTitles:[CHTUtil getLocalizedString:@"remind now"], [CHTUtil getLocalizedString:@"never remind"], nil];
+                [rateAlert setTag:TAG_ALERT_RATE_ME];
                 [rateAlert show];
             }
         }
         NSLog(@"times: %d", solvedTimes);
-        [defaults setInteger:solvedTimes forKey:@"solvedTimes"];
-        NSLog(@"times get: %d", [defaults integerForKey:@"solvedTimes"]);
-        [self performSelector:@selector(generateNextScramble) withObject:nil afterDelay:0.1];
-        //self.thisScramble = [self.scrambler generateScrambleString:self.scrambleType];
-        //self.scrambleDisplay.text = self.thisScramble;
-        //[self hideTabBar:NO];
-         */
+        [CHTSettings saveInt:solvedTimes forKey:@"solvedTimes"];
     }
 }
 
@@ -357,7 +390,7 @@ int oldScrSubType;
     if (self.timerStatus != TIMER_TIMING && self.timerStatus != TIMER_INSPECT && self.session.numberOfSolves > 0) {
         if (swipeGesture.direction == UISwipeGestureRecognizerDirectionLeft) {
             UIAlertView *deleteLastTimeAlert = [[UIAlertView alloc] initWithTitle:[CHTUtil getLocalizedString:@"delete last"] message:[CHTUtil getLocalizedString:@"sure?"] delegate:self cancelButtonTitle:[CHTUtil getLocalizedString:@"no"]otherButtonTitles:[CHTUtil getLocalizedString:@"yes"], nil];
-            [deleteLastTimeAlert setTag:1];
+            [deleteLastTimeAlert setTag:TAG_ALERT_DELETE_LAST_SOLVE];
             [deleteLastTimeAlert show];
         }
     }
@@ -367,7 +400,7 @@ int oldScrSubType;
     NSLog(@"Clear Timer.");
     if (self.timerStatus != TIMER_TIMING && self.timerStatus != TIMER_INSPECT && self.session.numberOfSolves > 0) {
         UIAlertView *clearTimeAlert = [[UIAlertView alloc] initWithTitle:[CHTUtil getLocalizedString:@"reset session"] message:[CHTUtil getLocalizedString:@"sure?"] delegate:self cancelButtonTitle:[CHTUtil getLocalizedString:@"no"]otherButtonTitles:[CHTUtil getLocalizedString:@"yes"], nil];
-        [clearTimeAlert setTag:2];
+        [clearTimeAlert setTag:TAG_ALERT_CLEAR_SESSION];
         [clearTimeAlert show];
     }
 }
@@ -376,7 +409,7 @@ int oldScrSubType;
     NSLog(@"add penalty.");
     if (self.session.numberOfSolves > 0 && ![self.timeLabel.text isEqualToString:@"Ready"] && self.timerStatus != TIMER_TIMING && self.timerStatus != TIMER_INSPECT && self.session.lastSolve.timeBeforePenalty != 2147483647) {
         UIAlertView *addPenaltyAlert = [[UIAlertView alloc] initWithTitle:[CHTUtil getLocalizedString:@"penalty"] message:[CHTUtil getLocalizedString:@"this time was"] delegate:self cancelButtonTitle:[CHTUtil getLocalizedString:@"cancel"] otherButtonTitles:@"+2", @"DNF", [CHTUtil getLocalizedString:@"no penalty"] , nil];
-        [addPenaltyAlert setTag:3];
+        [addPenaltyAlert setTag:TAG_ALERT_ADD_PANELTY];
         [addPenaltyAlert show];
     }
 }
@@ -434,7 +467,7 @@ int oldScrSubType;
 
 - (void)alertView:(UIAlertView *)uiAlertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     switch (uiAlertView.tag) {
-        case 1:
+        case TAG_ALERT_DELETE_LAST_SOLVE:
             // delete last time
             if (buttonIndex == 1) {
                 [self.session deleteLastSolve];
@@ -442,7 +475,7 @@ int oldScrSubType;
             }
             [CHTSessionManager saveSession:self.session];
             break;
-        case 2:
+        case TAG_ALERT_CLEAR_SESSION:
             // clear session
             if (buttonIndex == 1) {
                 [self.session clear];
@@ -450,7 +483,7 @@ int oldScrSubType;
             }
             [CHTSessionManager saveSession:self.session];
             break;
-        case 3:
+        case TAG_ALERT_ADD_PANELTY:
             // add penalty
             switch (buttonIndex) {
                 case 1:
@@ -479,7 +512,7 @@ int oldScrSubType;
             }
             
             break;
-        case 5:
+        case TAG_ALERT_RATE_ME:
             switch (buttonIndex) {
                 case 1:
                 {

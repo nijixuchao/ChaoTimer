@@ -102,8 +102,10 @@
     cell.textLabel.text = [self.helpsToDo objectAtIndex:indexPath.row];
     cell.detailTextLabel.text = [self.helps objectAtIndex:indexPath.row];
     cell.imageView.image = [self.helpsImage objectAtIndex:indexPath.row];
-    [cell.textLabel setFont:[CHTTheme font:FONT_REGULAR iphoneSize:20.0f ipadSize:22.0f]];
-    [cell.detailTextLabel setFont:[CHTTheme font:FONT_LIGHT iphoneSize:13.0f ipadSize:15.0f]];
+    [cell.textLabel setFont:[CHTTheme font:FONT_REGULAR iphoneSize:19.0f ipadSize:22.0f]];
+    [cell.detailTextLabel setFont:[CHTTheme font:FONT_LIGHT iphoneSize:14.0f ipadSize:15.0f]];
+    
+    [cell.detailTextLabel setTextColor:[UIColor darkGrayColor]];
     return cell;
 }
 

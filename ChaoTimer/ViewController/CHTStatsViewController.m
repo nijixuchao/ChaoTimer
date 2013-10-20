@@ -48,7 +48,6 @@
     [super viewDidLoad];
     self.navigationItem.title = [CHTUtil getLocalizedString:@"Stats"];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"sessions.png"] style:UIBarButtonItemStylePlain target:self action:@selector(presentSessionView)];
-
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
  
@@ -60,6 +59,7 @@
 {
     NSLog(@"view will appear");
     [self reload];
+    self.timerTheme = [CHTTheme getTimerTheme];
     [super viewWillAppear:animated];
 }
 
@@ -100,8 +100,8 @@
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     [cell.detailTextLabel setTextColor:[self.timerTheme getTintColor]];
-    [cell.textLabel setFont:[CHTTheme font:FONT_REGULAR iphoneSize:17.0f ipadSize:17.0f]];
-    [cell.detailTextLabel setFont:[CHTTheme font:FONT_LIGHT iphoneSize:17.0f ipadSize:17.0f]];
+    [cell.textLabel setFont:[CHTTheme font:FONT_REGULAR iphoneSize:18.0f ipadSize:18.0f]];
+    [cell.detailTextLabel setFont:[CHTTheme font:FONT_LIGHT iphoneSize:18.0f ipadSize:18.0f]];
     return cell;
 }
 

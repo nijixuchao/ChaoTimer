@@ -20,6 +20,9 @@
 @synthesize best;
 @synthesize worst;
 
+int solveOrder;
+int solveDetailDisplay;
+
 - (id)initWithStyle:(UITableViewStyle)style
 {
     self = [super initWithStyle:style];
@@ -42,6 +45,8 @@
     [super viewWillAppear:animated];
     [self getBestAndWorst];
     [self.tableView reloadData];
+    solveOrder = [CHTSettings getSavedInt:@"solveOrder"];
+    solveDetailDisplay = [CHTSettings getSavedInt:@"solveDetailDisplay"];
 }
 
 - (void)didReceiveMemoryWarning
@@ -84,20 +89,43 @@
             break;
         case 1:
         {
-            CHTSolve *solve = [self.statDetails objectAtIndex:indexPath.row];
+            CHTSolve *solve;
+            if (solveOrder == 1) {
+                solve = [self.statDetails objectAtIndex:(self.statDetails.count - 1 -indexPath.row)];
+            } else {
+                solve = [self.statDetails objectAtIndex:indexPath.row];
+            }
+            
             if ([solve isEqual:self.best] || [solve isEqual:self.worst]) {
                 cell.textLabel.text = [NSString stringWithFormat:@"( %@ )", [solve toString]];
             } else {
                 cell.textLabel.text = [solve toString];
             }
-            cell.detailTextLabel.text = [solve getTimeStampString];
+            switch (solveDetailDisplay) {
+                case 0:
+                    cell.detailTextLabel.text = [solve getTimeStampString];
+                    break;
+                case 1:
+                    cell.detailTextLabel.text = solve.scramble.scramble;
+                    break;
+                case 2:
+                    cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ %@", solve.scramble.scrType, solve.scramble.scrSubType];
+                    break;
+                default:
+                    cell.detailTextLabel.text = [solve getTimeStampString];
+                    break;
+            }
+            
+            [cell setSelectionStyle:UITableViewCellSelectionStyleGray];
+            [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
             break;
         }
         default:
             break;
     }
-    [cell.textLabel setFont:[CHTTheme font:FONT_REGULAR iphoneSize:17.0f ipadSize:17.0f]];
+    [cell.textLabel setFont:[CHTTheme font:FONT_REGULAR iphoneSize:18.0f ipadSize:18.0f]];
     [cell.detailTextLabel setFont:[CHTTheme font:FONT_LIGHT iphoneSize:12.0f ipadSize:12.0f]];
+    [cell.detailTextLabel setTextColor:[UIColor darkGrayColor]];
     return cell;
 }
 
@@ -143,7 +171,12 @@
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         // Delete the row from the data source
-        CHTSolve *solve = [self.statDetails objectAtIndex:indexPath.row];
+        CHTSolve *solve;
+        if (solveOrder == 1) {
+            solve = [self.statDetails objectAtIndex:(self.statDetails.count - 1 -indexPath.row)];
+        } else {
+            solve = [self.statDetails objectAtIndex:indexPath.row];
+        }
         [self.session removeSolve:solve];
         [self.statDetails removeObjectAtIndex:indexPath.row];
         [CHTSessionManager saveSession:self.session];
@@ -189,7 +222,12 @@
     UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
     [cell setSelected:NO animated:YES];
     if (indexPath.section == 1) {
-        CHTSolve *solve = [self.statDetails objectAtIndex:indexPath.row];
+        CHTSolve *solve;
+        if (solveOrder == 1) {
+            solve = [self.statDetails objectAtIndex:(self.statDetails.count - 1 -indexPath.row)];
+        } else {
+            solve = [self.statDetails objectAtIndex:indexPath.row];
+        }
         CHTSolveDetailViewController *solveDetailViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"oneSolveDetail"];
         solveDetailViewController.hidesBottomBarWhenPushed = YES;
         solveDetailViewController.solve = solve;

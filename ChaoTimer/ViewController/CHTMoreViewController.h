@@ -7,9 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "CHTUtil.h"
-#import "CHTTheme.h"
-#import "CHTThemeViewController.h"
 #import <MessageUI/MessageUI.h>
 
 @interface CHTMoreViewController : UITableViewController <MFMailComposeViewControllerDelegate>
