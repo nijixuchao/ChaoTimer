@@ -12,6 +12,8 @@
 #import "CHTTheme.h"
 #import "CHTThemeViewController.h"
 #import "CHTSettingViewController.h"
+#import "CHTSocialViewController.h"
+#import "CHTLicenseViewController.h"
 
 @interface CHTMoreViewController ()
 @property (nonatomic, strong) CHTTheme *timerTheme;
@@ -62,7 +64,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 3;
+    return 4;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -72,10 +74,13 @@
             return 1;
             break;
         case 1:
-            return 2;
+            return 3;
             break;
         case 2:
             return 3;
+            break;
+        case 3:
+            return 1;
             break;
         default:
             return 0;
@@ -117,6 +122,11 @@
                     cell.detailTextLabel.text = @"";
                     cell.imageView.image = [UIImage imageNamed:@"setting.png"];
                     break;
+                case 2:
+                    cell.textLabel.text = [CHTUtil getLocalizedString:@"social"];
+                    cell.detailTextLabel.text = @"";
+                    cell.imageView.image = [UIImage imageNamed:@"share.png"];
+                    break;
                 default:
                     break;
             }
@@ -142,6 +152,17 @@
                     break;
             }
             break;
+        case 3:
+            switch (indexPath.row) {
+                case 0:
+                    cell.textLabel.text = [CHTUtil getLocalizedString:@"license"];
+                    cell.detailTextLabel.text = @"";
+                    cell.imageView.image = [UIImage imageNamed:@"license.png"];
+                    break;
+                default:
+                    break;
+            }
+            break;
         default:
             break;
     }
@@ -160,17 +181,18 @@
             break;
         case 1:
             switch (indexPath.row) {
-                case 0: {
-                    CHTThemeViewController *themeViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"ThemeControl"];
-                    themeViewController.hidesBottomBarWhenPushed = YES;
-                    [self.navigationController pushViewController:themeViewController animated:YES];
+                case 0:
+                    [self pushToThemeView];
                     break;
-                }
                 case 1:
                     [self pushToSettingView];
                     break;
+                case 2:
+                    [self pushToSocialSettingView];
+                    break;
                 default:
                     break;
+                    
             }
             break;
         case 2:
@@ -188,14 +210,41 @@
                     break;
             }
             break;
+        case 3:
+            switch (indexPath.row) {
+                case 0:
+                    [self pushToLicenseView];
+                    break;
+                default:
+                    break;
+            }
         default:
             break;
     }
 }
+- (IBAction) pushToThemeView {
+    CHTThemeViewController *themeViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"ThemeControl"];
+    themeViewController.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:themeViewController animated:YES];
+}
+
 
 - (IBAction) pushToSettingView {
     CHTSettingViewController *settingViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"setting"];
+    settingViewController.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:settingViewController animated:YES];
+}
+
+- (IBAction) pushToSocialSettingView {
+    CHTSocialViewController *socialViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"socialSetting"];
+    socialViewController.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:socialViewController animated:YES];
+}
+
+- (IBAction) pushToLicenseView {
+    CHTLicenseViewController *licenseViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"license"];
+    licenseViewController.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:licenseViewController animated:YES];
 }
 
 - (IBAction) tellFriends {
@@ -221,7 +270,7 @@
 
 - (IBAction)rateForApp {
     NSLog(@"===== openURL! =====");
-    NSString *str = [NSString stringWithFormat:@"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=%d", 537516001];
+    NSString *str = [NSString stringWithFormat:@"itms-apps://itunes.apple.com/app/id%d", 537516001];
     NSLog(@"URL string:%@",str);
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
 }

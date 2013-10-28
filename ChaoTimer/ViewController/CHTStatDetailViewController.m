@@ -7,9 +7,18 @@
 //
 
 #import "CHTStatDetailViewController.h"
+#import "CHTTheme.h"
+#import "CHTSettings.h"
+#import "CHTUtil.h"
+#import "CHTSession.h"
+#import "CHTSessionManager.h"
+#import "CHTOneStat.h"
+#import "CHTSolveDetailViewController.h"
 
 @interface CHTStatDetailViewController ()
-@property CHTSolve *best, *worst;
+@property (nonatomic, strong) CHTSolve *best, *worst;
+@property (nonatomic, strong) CHTTheme *timerTheme;
+@property (nonatomic) int solveOrder;
 @end
 
 @implementation CHTStatDetailViewController
@@ -19,8 +28,9 @@
 @synthesize row;
 @synthesize best;
 @synthesize worst;
+@synthesize timerTheme;
+@synthesize solveOrder;
 
-int solveOrder;
 int solveDetailDisplay;
 
 - (id)initWithStyle:(UITableViewStyle)style
@@ -32,11 +42,16 @@ int solveDetailDisplay;
     return self;
 }
 
+- (int)solveOrder {
+    return [CHTSettings getSavedInt:@"solveOrder"];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     self.navigationItem.title = [CHTUtil getLocalizedString:@"Detail"];
     self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    self.timerTheme = [CHTTheme getTimerTheme];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -45,7 +60,6 @@ int solveDetailDisplay;
     [super viewWillAppear:animated];
     [self getBestAndWorst];
     [self.tableView reloadData];
-    solveOrder = [CHTSettings getSavedInt:@"solveOrder"];
     solveDetailDisplay = [CHTSettings getSavedInt:@"solveDetailDisplay"];
 }
 
@@ -82,15 +96,30 @@ int solveDetailDisplay;
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     switch (indexPath.section) {
         case 0:
-            [cell.textLabel setText:[CHTUtil getLocalizedString:self.stat.statType]];
-            [cell.detailTextLabel setText:self.stat.statValue];
-            [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-            [cell setAccessoryType: UITableViewCellAccessoryNone];
+        {
+            if (indexPath.row == 0) {
+                [cell.textLabel setText:[CHTUtil getLocalizedString:self.stat.statType]];
+                [cell.detailTextLabel setText:self.stat.statValue];
+                [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+                NSArray *solveOrders = [[NSArray alloc] initWithObjects:[CHTUtil getLocalizedString:@"↓"], [CHTUtil getLocalizedString:@"↑"], nil];
+                UISegmentedControl *solveOrderSegment = [[UISegmentedControl alloc] initWithItems:solveOrders];
+                
+                [solveOrderSegment setTintColor:[self.timerTheme getTintColor]];
+                int order = [CHTSettings getSavedInt:@"solveOrder"];
+                [solveOrderSegment setSelectedSegmentIndex:order];
+                [solveOrderSegment addTarget:self action:@selector(solveOrderSegmentChange:) forControlEvents:UIControlEventValueChanged];
+                cell.accessoryView = solveOrderSegment;
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            } else {
+                cell.accessoryView = nil;
+                [cell setAccessoryType:UITableViewCellAccessoryNone];
+            }
             break;
+        }
         case 1:
         {
             CHTSolve *solve;
-            if (solveOrder == 1) {
+            if (self.solveOrder == 1) {
                 solve = [self.statDetails objectAtIndex:(self.statDetails.count - 1 -indexPath.row)];
             } else {
                 solve = [self.statDetails objectAtIndex:indexPath.row];
@@ -117,6 +146,7 @@ int solveDetailDisplay;
             }
             
             [cell setSelectionStyle:UITableViewCellSelectionStyleGray];
+            cell.accessoryView = nil;
             [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
             break;
         }
@@ -131,8 +161,12 @@ int solveDetailDisplay;
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     //NSLog(@"will display cell");
-    if (indexPath.row % 2 == 1) {
-        [cell setBackgroundColor:[UIColor colorWithRed:240/255.0f green:240/255.0f blue:240/255.0f alpha:1]];
+    if (indexPath.section == 1) {
+        if (indexPath.row % 2 == 1) {
+            [cell setBackgroundColor:[UIColor colorWithRed:240/255.0f green:240/255.0f blue:240/255.0f alpha:1]];
+        } else {
+            [cell setBackgroundColor:[UIColor whiteColor]];
+        }
     } else {
         [cell setBackgroundColor:[UIColor whiteColor]];
     }
@@ -172,7 +206,7 @@ int solveDetailDisplay;
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         // Delete the row from the data source
         CHTSolve *solve;
-        if (solveOrder == 1) {
+        if (self.solveOrder == 1) {
             solve = [self.statDetails objectAtIndex:(self.statDetails.count - 1 -indexPath.row)];
         } else {
             solve = [self.statDetails objectAtIndex:indexPath.row];
@@ -223,7 +257,7 @@ int solveDetailDisplay;
     [cell setSelected:NO animated:YES];
     if (indexPath.section == 1) {
         CHTSolve *solve;
-        if (solveOrder == 1) {
+        if (self.solveOrder == 1) {
             solve = [self.statDetails objectAtIndex:(self.statDetails.count - 1 -indexPath.row)];
         } else {
             solve = [self.statDetails objectAtIndex:indexPath.row];
@@ -341,6 +375,13 @@ int solveDetailDisplay;
         }
     }
 
+}
+
+- (IBAction)solveOrderSegmentChange:(id)sender {
+    NSLog(@"solveOrderSegmentChange");
+    UISegmentedControl *segCtrl = (UISegmentedControl *)sender;
+    [CHTSettings saveInt:segCtrl.selectedSegmentIndex forKey:@"solveOrder"];
+    [self reload];
 }
 
 @end

@@ -58,6 +58,11 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     return [defaults stringForKey:key];
 }
+
++ (NSObject *) getSavedObject: (NSString *)key{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    return [defaults objectForKey:key];
+}
 + (BOOL) hasObjectForKey: (NSString *)key {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     if ([defaults objectForKey:key] != nil) {
@@ -79,6 +84,11 @@
     [defaults synchronize];
 }
 + (void) saveString:(NSString *)value forKey:(NSString *)key {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:value forKey:key];
+    [defaults synchronize];
+}
++ (void) saveObject:(NSObject *)value forKey:(NSString *)key {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setObject:value forKey:key];
     [defaults synchronize];

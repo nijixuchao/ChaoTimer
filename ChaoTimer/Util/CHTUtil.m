@@ -7,6 +7,7 @@
 //
 
 #import "CHTUtil.h"
+#import "CHTSettings.h"
 
 @implementation CHTUtil
 
@@ -82,6 +83,20 @@
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return image;
+}
+
++ (bool) versionUpdateds
+{
+    NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
+    NSString *crtVersion = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
+    NSString *oldVersion = [CHTSettings getSavedString:@"appVersion"];
+    NSLog(@"AppVersion old: %@, new: %@", oldVersion, crtVersion);
+    if ([crtVersion isEqualToString:oldVersion]) {
+        return false;
+    } else {
+        [CHTSettings saveString:crtVersion forKey:@"appVersion"];
+        return true;
+    }
 }
 
 @end

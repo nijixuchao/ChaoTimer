@@ -14,5 +14,5 @@
 
 @property (nonatomic) int selectedType;
 @property (nonatomic) int selectedSubType;
-- (id) init;
+- (id) initWithPickerView;
 @end

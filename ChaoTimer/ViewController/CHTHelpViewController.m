@@ -24,7 +24,9 @@
                   [CHTUtil getLocalizedString:@"sl"],
                   [CHTUtil getLocalizedString:@"1f2t"],
                   [CHTUtil getLocalizedString:@"2f2t"],
-                  [CHTUtil getLocalizedString:@"2fup"], nil];
+                  [CHTUtil getLocalizedString:@"2fup"],
+                  [CHTUtil getLocalizedString:@"1fd"],
+                  nil];
     }
     return _helps;
 }
@@ -32,7 +34,14 @@
 - (NSArray *)helpsToDo {
     if (!_helpsToDo) {
         _helpsToDo = [[NSArray alloc] initWithObjects:
-                      [CHTUtil getLocalizedString:@"1fholdto"],[CHTUtil getLocalizedString:@"srto"], [CHTUtil getLocalizedString:@"slto"],[CHTUtil getLocalizedString:@"1f2tto"], [CHTUtil getLocalizedString:@"2f2tto"], [CHTUtil getLocalizedString:@"2fupto"],nil];
+                      [CHTUtil getLocalizedString:@"1fholdto"],
+                      [CHTUtil getLocalizedString:@"srto"],
+                      [CHTUtil getLocalizedString:@"slto"],
+                      [CHTUtil getLocalizedString:@"1f2tto"],
+                      [CHTUtil getLocalizedString:@"2f2tto"],
+                      [CHTUtil getLocalizedString:@"2fupto"],
+                      [CHTUtil getLocalizedString:@"1fdto"],
+                      nil];
     }
     return _helpsToDo;
 }
@@ -45,7 +54,9 @@
                        [UIImage imageNamed:@"1fl.png"],
                        [UIImage imageNamed:@"1f2t.png"],
                        [UIImage imageNamed:@"2f2t.png"],
-                       [UIImage imageNamed:@"2fup.png"], nil];
+                       [UIImage imageNamed:@"2fup.png"],
+                       [UIImage imageNamed:@"1fd.png"],
+                       nil];
     }
     return _helpsImage;
 }
@@ -64,6 +75,7 @@
 {
     [super viewDidLoad];
     self.navigationItem.title = [CHTUtil getLocalizedString:@"Gestures Help"];
+    [[self.tabBarController.tabBar.items objectAtIndex:2] setBadgeValue:nil];
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     

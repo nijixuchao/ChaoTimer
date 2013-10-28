@@ -7,11 +7,24 @@
 //
 
 #import "CHTStatsViewController.h"
+#import "CHTTheme.h"
+#import "CHTSettings.h"
+#import "CHTUtil.h"
+#import "CHTSession.h"
+#import "CHTSessionManager.h"
+#import "CHTOneStat.h"
+#import "CHTStatDetailViewController.h"
+#import "CHTSessionViewController.h"
+#import "CHTSolveDetailViewController.h"
+#import "CHTSocial.h"
+#import "CHTSocialObject.h"
+#import <ShareSDK/ShareSDK.h>
 
 @interface CHTStatsViewController ()
 @property (nonatomic, strong) CHTSession *session;
 @property (nonatomic, strong) UIPopoverController *popoverController;
 @property (nonatomic, strong) CHTTheme *timerTheme;
+@property (nonatomic, strong) id<ISSCAttachment> snapshot;
 @end
 
 @implementation CHTStatsViewController
@@ -19,6 +32,7 @@
 @synthesize stats = _stats;
 @synthesize timerTheme;
 @synthesize popoverController;
+@synthesize snapshot;
 
 - (CHTSession *) session {
     if (!_session) {
@@ -48,12 +62,11 @@
     [super viewDidLoad];
     self.navigationItem.title = [CHTUtil getLocalizedString:@"Stats"];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"sessions.png"] style:UIBarButtonItemStylePlain target:self action:@selector(presentSessionView)];
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-}
+    
+    if ([CHTSocial getShareTypeList].count != 0) {
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(share)];
+    }
+    }
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -61,6 +74,15 @@
     [self reload];
     self.timerTheme = [CHTTheme getTimerTheme];
     [super viewWillAppear:animated];
+}
+
+- (void)viewDidLayoutSubviews
+{
+    NSLog(@"view did layout subviews");
+    [super viewDidLayoutSubviews];
+    if (!self.snapshot) {
+        [self performSelector:@selector(screenshot) withObject:nil afterDelay:0.1];
+    }
 }
 
 
@@ -143,7 +165,7 @@
     [[self.tabBarController.tabBar.items objectAtIndex:0] setBadgeValue:[NSString stringWithFormat:@"%d", self.session.numberOfSolves]];
     [self.stats removeAllObjects];
     CHTOneStat *numOfSolves = [CHTOneStat initWithType:@"Number of solves: " Value:[NSString stringWithFormat:@"%d", self.session.numberOfSolves]];
-        [self.stats addObject:numOfSolves];
+    [self.stats addObject:numOfSolves];
     
     if (numberOfSolves > 0) {
         CHTOneStat *bestTime = [CHTOneStat initWithType:@"Best time: " Value:[[self.session bestSolve] toString]];
@@ -178,47 +200,6 @@
     }
     [self.tableView reloadData];
 }
-
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
 
 #pragma mark - Navigation
 
@@ -289,36 +270,60 @@
     }
 }
 
+#pragma mark - Share
 
-/*
-// In a story board-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    
-    // unwrap the controller if it's embedded in the nav controller.
-    UIViewController *controller;
-    if ([segue.destinationViewController isKindOfClass:[UINavigationController class]]) {
-        UINavigationController *navController = (UINavigationController *)segue.destinationViewController;
-        controller = [navController.viewControllers objectAtIndex:0];
-    } else {
-        controller = segue.destinationViewController;
+- (void) share {
+    UINavigationBar *bar = self.navigationController.navigationBar;
+    UIView *view = (UIView *)[bar.subviews objectAtIndex:3];
+    if (self.snapshot == nil) {
+        NSLog(@"no screenshot");
+        [self screenshot];
     }
-    
-    if ([controller isKindOfClass:[CHTStatDetailViewController class]]) {
-        CHTStatDetailViewController *vc = (CHTStatDetailViewController *)controller;
-        NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-        switch (indexPath.row) {
-            case 0:
-                break;
-            case 1:
-                break;
-            default:
-                break;
-        }
-        
-    } else {
-        NSLog(@"Unknown segue. All segues must be handled.");
-    }
+    [CHTSocial share:view delegate:self session:self.session image:self.snapshot];
 }
-*/
+
+- (void) screenshot {
+    NSLog(@"Screenshot");
+    UIGraphicsBeginImageContextWithOptions(self.view.bounds.size, NO, [UIScreen mainScreen].scale);
+    
+    [self.view drawViewHierarchyInRect:self.view.bounds afterScreenUpdates:YES];
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    self.snapshot = [ShareSDK pngImageWithImage:image];
+    return;
+}
+
+- (void)viewOnWillDisplay:(UIViewController *)viewController shareType:(ShareType)shareType
+{
+    NSLog(@"view on will display delegate");
+    for (UIView *view in viewController.view.subviews) {
+        if ([view isKindOfClass:[UILabel class]]) {
+            UILabel *label = (UILabel *)view;
+            if ([label.text isEqualToString:@"share title"]) {
+                label.text = [[CHTSocialObject initWithType:shareType] toString];
+                label.font = [CHTTheme font:FONT_REGULAR iphoneSize:22.0f ipadSize:22.0f];
+            }
+        }
+    }
+    UIButton *leftBtn = (UIButton *)viewController.navigationItem.leftBarButtonItem.customView;
+    UIButton *rightBtn = (UIButton *)viewController.navigationItem.rightBarButtonItem.customView;
+    
+    leftBtn.backgroundColor = [UIColor clearColor];
+    rightBtn.backgroundColor = [UIColor clearColor];
+    [leftBtn setTitleColor:self.timerTheme.barItemColor forState:UIControlStateNormal];
+    [leftBtn setTitleColor:[UIColor colorWithRed:0.2f green:0.2f blue:0.2f alpha:0.5f] forState:UIControlStateHighlighted];
+    [rightBtn setTitleColor:self.timerTheme.barItemColor forState:UIControlStateNormal];
+    [rightBtn setTitleColor:[UIColor colorWithRed:0.2f green:0.2f blue:0.2f alpha:0.5f] forState:UIControlStateHighlighted];
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectZero];
+    label.backgroundColor = [UIColor clearColor];
+    label.textColor = self.timerTheme.textColor;
+    label.text = [[CHTSocialObject initWithType:shareType] toString];
+    label.font = [CHTTheme font:FONT_REGULAR iphoneSize:22.0f ipadSize:22.0f];
+    [label sizeToFit];
+    
+    viewController.navigationItem.titleView = label;
+    [viewController.navigationController.navigationBar setBackgroundImage:nil forBarMetrics:UIBarMetricsDefault];
+    [viewController.navigationController.navigationBar setBarTintColor:self.timerTheme.navigationColor];
+}
+
 @end

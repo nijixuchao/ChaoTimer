@@ -90,7 +90,6 @@
                     cell.textLabel.text = [CHTUtil getLocalizedString:@"wca inspection"];
                     cell.detailTextLabel.text = [CHTUtil getLocalizedString:@"15 sec"];
                     UISwitch *wcaInsSwitch = [[UISwitch alloc] init];
-                    [wcaInsSwitch setTag:1];
                     [wcaInsSwitch addTarget:self action:@selector(wcaSwitchAction:) forControlEvents:UIControlEventValueChanged];
                     if ([CHTSettings getSavedBool: @"wcaInspection"] == YES) {
                         [wcaInsSwitch setOn:YES];
@@ -181,6 +180,18 @@
     }
 }
 
+- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
+    switch (section) {
+        case 0:
+            return [CHTUtil getLocalizedString:@"TimingFooter"];
+        case 1:
+            return [CHTUtil getLocalizedString:@"StatsFooter"];
+        default:
+            return @"";
+            break;
+    }
+}
+
 - (IBAction)freezeTimeSliderChanged:(id)sender {
     UISlider *slider = (UISlider *)sender;
     int progressAsInt = (int)roundf(slider.value);
@@ -194,19 +205,10 @@
 - (IBAction)wcaSwitchAction:(id)sender {
     UISwitch *switchButton = (UISwitch*)sender;
     BOOL isButtonOn = [switchButton isOn];
-    switch (switchButton.tag) {
-        case 1:
-            if (isButtonOn) {
-                [CHTSettings saveBool:YES forKey:@"wcaInspection"];
-            }else {
-                [CHTSettings saveBool:NO forKey:@"wcaInspection"];
-            }
-            break;
-        case 2:
-            
-            break;
-        default:
-            break;
+    if (isButtonOn) {
+        [CHTSettings saveBool:YES forKey:@"wcaInspection"];
+    }else {
+        [CHTSettings saveBool:NO forKey:@"wcaInspection"];
     }
 }
 

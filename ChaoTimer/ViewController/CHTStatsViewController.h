@@ -7,15 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "CHTTheme.h"
-#import "CHTSettings.h"
-#import "CHTUtil.h"
-#import "CHTSession.h"
-#import "CHTSessionManager.h"
-#import "CHTOneStat.h"
-#import "CHTStatDetailViewController.h"
-#import "CHTSessionViewController.h"
+#import <ShareSDK/ISSShareViewDelegate.h>
 
-@interface CHTStatsViewController : UITableViewController <UIPopoverControllerDelegate>
+@interface CHTStatsViewController : UITableViewController <UIPopoverControllerDelegate, ISSShareViewDelegate>
 @property (nonatomic, strong) NSMutableArray *stats;
 @end

@@ -14,4 +14,5 @@
 @property (nonatomic, strong) NSString *scramble;
 
 +(CHTScramble *) getNewScrambleByScrambler:(CHTScrambler *)scrambler type:(int)type subType:(int)subType;
++ (NSString *)getScrambleTypeStringByType:(int)type language:(int)language;
 @end

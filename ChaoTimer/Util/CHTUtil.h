@@ -22,4 +22,5 @@ typedef enum device {
 + (CGFloat) getScreenWidth;
 + (CGFloat) heightOfContent: (NSString *)content font:(UIFont *)font;
 + (UIImage *)imageWithColor:(UIColor *)color;
++ (bool) versionUpdateds;
 @end

@@ -89,8 +89,10 @@
 - (void) setNavigationControllerTheme: (UINavigationController *)controller {
     UIApplication *myApp = [UIApplication sharedApplication];
     if (myTheme == THEME_WHITE) {
+        NSLog(@"theme white");
         [myApp setStatusBarStyle:UIStatusBarStyleDefault animated:YES];
     } else {
+        NSLog(@"theme others");
         [myApp setStatusBarStyle:UIStatusBarStyleLightContent animated:YES];
     }
     [controller.navigationBar setTitleTextAttributes:@{

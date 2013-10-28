@@ -7,14 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "CHTTheme.h"
-#import "CHTSettings.h"
-#import "CHTUtil.h"
-#import "CHTSession.h"
-#import "CHTSessionManager.h"
-#import "CHTOneStat.h"
-#import "CHTSolveDetailViewController.h"
 
+@class CHTSession;
+@class CHTOneStat;
 @interface CHTStatDetailViewController : UITableViewController
 @property (nonatomic, strong) NSMutableArray *statDetails;
 @property (nonatomic, strong) CHTSession *session;

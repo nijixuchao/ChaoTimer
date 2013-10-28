@@ -13,8 +13,11 @@
 #define typeComponent 0
 #define subsetComponent 1
 #define typeComponentWidth 110
+#define typeComponentWidthPad 140
 #define subsetComponentWidth 150
+#define subsetComponentWidthPad 170
 #define rowHeight 35.0f
+#define rowHeightPad 40.0f
 
 @interface CHTScramblePickerView ()
 
@@ -34,8 +37,9 @@
 @synthesize selectedType;
 @synthesize selectedSubType;
 
-- (id) init {
-    self = [self initWithParentView:[UIApplication sharedApplication].keyWindow.subviews.lastObject];
+- (id) initWithPickerView {
+    self = [self init];
+    //self = [self initWithParentView:[UIApplication sharedApplication].keyWindow.subviews.lastObject];
     if (self) {
         [self addPickerView];
         self.buttonTitles = [NSMutableArray arrayWithObjects:[CHTUtil getLocalizedString:@"cancel"], [CHTUtil getLocalizedString:@"done"], nil];
@@ -53,7 +57,12 @@
     //self.types = [self.scrType allKeys];
     NSString *select = [self.types objectAtIndex:0];
     self.subsets = [self.scrType objectForKey:select];
-    self.myPickerView = [[UIPickerView alloc] initWithFrame:CGRectMake(0, 0, 270, 300)];
+    if ([CHTUtil getDevice] == DEVICE_PHONE) {
+        self.myPickerView = [[UIPickerView alloc] initWithFrame:CGRectMake(0, 0, 270, 300)];
+    } else {
+        self.myPickerView = [[UIPickerView alloc] initWithFrame:CGRectMake(0, 0, 320, 400)];
+    }
+    
     self.myPickerView.showsSelectionIndicator = YES;
     self.myPickerView.delegate = self;
     self.myPickerView.dataSource = self;
@@ -92,15 +101,27 @@
 
 - (CGFloat)pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component {
     if (component == typeComponent) {
-        return typeComponentWidth;
+        if ([CHTUtil getDevice] == DEVICE_PHONE) {
+            return typeComponentWidth;
+        } else {
+            return typeComponentWidthPad;
+        }
     } else {
-        return subsetComponentWidth;
+        if ([CHTUtil getDevice] == DEVICE_PHONE) {
+            return subsetComponentWidth;
+        } else {
+            return subsetComponentWidthPad;
+        }
     }
 }
 
 - (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component
 {
-    return rowHeight;
+    if ([CHTUtil getDevice] == DEVICE_PHONE) {
+        return rowHeight;
+    } else {
+        return rowHeightPad;
+    }
 }
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {

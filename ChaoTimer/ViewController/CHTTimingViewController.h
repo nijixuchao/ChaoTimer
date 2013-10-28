@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+#import "CHTScramblePickerView.h"
 
 typedef enum timerStatus {
     TIMER_IDLE = 0,
@@ -17,7 +18,7 @@ typedef enum timerStatus {
     TIMER_INSPECT = 4,
 } TimerStatus;
 
-@interface CHTTimingViewController : UIViewController
+@interface CHTTimingViewController : UIViewController<CustomIOS7AlertViewDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *scrambleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *timeLabel;
 @property NSTimer *myTimer;

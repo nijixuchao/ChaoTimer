@@ -14,7 +14,6 @@
 #import "CHTSessionManager.h"
 #import "CHTUtil.h"
 #import "CHTTheme.h"
-#import "CHTScramblePickerView.h"
 #import "CHTScrambler.h"
 #import <mach/mach_time.h>
 
@@ -24,6 +23,7 @@
 #define TAG_ALERT_ADD_PANELTY 3
 #define TAG_ALERT_CHANGE_SCRAMBLE_TYPE 4
 #define TAG_ALERT_RATE_ME 5
+#define TAG_ALERT_ADD_NEW_SOLVE 6
 
 @interface CHTTimingViewController ()
 @property (nonatomic) TimerStatus timerStatus;
@@ -102,13 +102,18 @@ int solvedTimes;
     [self.scrambler initSq1];
     [self changeScramble];
     [self.scrambleLabel setFont:[CHTTheme font:FONT_LIGHT iphoneSize:20.0f ipadSize:40.0f]];
-    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(orientationChanged:)  name:UIDeviceOrientationDidChangeNotification  object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     [self.longPressGesture setMinimumPressDuration:[CHTSettings getFreezeTime] * 0.01];
+    if ([CHTUtil versionUpdateds]) {
+        UIAlertView *updateAlert = [[UIAlertView alloc] initWithTitle:[CHTUtil getLocalizedString:@"appUpdated"] message:[CHTUtil getLocalizedString:@"appUpdatedDetail"] delegate:self cancelButtonTitle:[CHTUtil getLocalizedString:@"OK" ] otherButtonTitles:nil];
+        [updateAlert show];
+        [[self.tabBarController.tabBar.items objectAtIndex:2] setBadgeValue:[CHTUtil getLocalizedString:@"new"]];
+    }
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -127,17 +132,12 @@ int solvedTimes;
     solvedTimes = [CHTSettings getSavedInt:@"solvedTimes"];
 }
 
-
 - (void)viewWillDisappear:(BOOL)animated {
     [CHTSessionManager saveSession:self.session];
     [self performSelector:@selector(stopTimer)];
     [super viewWillDisappear:animated];
 }
 
-- (void)orientationChanged:(NSNotification *)notification{
-    NSLog(@"orientation changed");
-    [self.pickerView close];
-}
 
 - (void)didReceiveMemoryWarning
 {
@@ -173,7 +173,7 @@ int solvedTimes;
     [swipeGestureUp requireGestureRecognizerToFail:self.longPressGesture];
     [self.view addGestureRecognizer:swipeGestureUp];
     
-    UISwipeGestureRecognizer *swipeGestureDown = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(resetTimerStatus:)];
+    UISwipeGestureRecognizer *swipeGestureDown = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(manuallyAddNewSolve:)];
     [swipeGestureDown setDirection:UISwipeGestureRecognizerDirectionDown];
     [swipeGestureDown requireGestureRecognizerToFail:self.longPressGesture];
     [self.view addGestureRecognizer:swipeGestureDown];
@@ -357,23 +357,7 @@ int solvedTimes;
         self.tabBarItem.badgeValue = [NSString stringWithFormat:@"%d", self.session.numberOfSolves];
         [self displayNextScramble];
         
-        solvedTimes++;
-        BOOL ifRated = [CHTSettings getSavedBool:@"ifRated"];
-        if (solvedTimes >= 100) {
-            solvedTimes = 0;
-            if (!ifRated) {
-                UIAlertView *rateAlert = [[UIAlertView alloc]
-                    initWithTitle:[CHTUtil getLocalizedString:@"rateTitle" ]
-                    message:[CHTUtil getLocalizedString:@"rateBody"]
-                    delegate:self
-                    cancelButtonTitle:[CHTUtil getLocalizedString:@"remind later"]
-                    otherButtonTitles:[CHTUtil getLocalizedString:@"remind now"], [CHTUtil getLocalizedString:@"never remind"], nil];
-                [rateAlert setTag:TAG_ALERT_RATE_ME];
-                [rateAlert show];
-            }
-        }
-        NSLog(@"times: %d", solvedTimes);
-        [CHTSettings saveInt:solvedTimes forKey:@"solvedTimes"];
+        [self checkRated];
     }
 }
 
@@ -417,11 +401,24 @@ int solvedTimes;
 - (IBAction)chooseScrambleType:(id)sender {
     NSLog(@"Choose Scramble Type.");
     if (self.timerStatus != TIMER_TIMING && self.timerStatus != TIMER_INSPECT) {
-        pickerView = [[CHTScramblePickerView alloc] init];
+        pickerView = [[CHTScramblePickerView alloc] initWithPickerView];
         [pickerView setDelegate:self];
         [pickerView setTag:TAG_ALERT_CHANGE_SCRAMBLE_TYPE];
         [pickerView show];
     }
+}
+
+- (IBAction)manuallyAddNewSolve:(id)sender {
+    NSLog(@"Manually Add New Solve");
+    if (self.timerStatus != TIMER_TIMING && self.timerStatus != TIMER_INSPECT) {
+        UIAlertView *manuallyAddAlert = [[UIAlertView alloc] initWithTitle:[CHTUtil getLocalizedString:@"manuallyAdd"] message:[CHTUtil getLocalizedString:@"originalTime"] delegate:self cancelButtonTitle:[CHTUtil getLocalizedString:@"cancel"] otherButtonTitles:[CHTUtil getLocalizedString:@"done"], nil];
+        [manuallyAddAlert setAlertViewStyle:UIAlertViewStylePlainTextInput];
+        UITextField *timeInput = [manuallyAddAlert textFieldAtIndex:0];
+        [timeInput setKeyboardType:UIKeyboardTypeDecimalPad];
+        [manuallyAddAlert setTag:TAG_ALERT_ADD_NEW_SOLVE];
+        [manuallyAddAlert show];
+    }
+    
 }
 
 /* Delegate of CustomIOS7AlertView*/
@@ -518,7 +515,7 @@ int solvedTimes;
                 {
                     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
                     [defaults setBool:YES forKey:@"ifRated"];
-                    NSString *str = [NSString stringWithFormat:@"itms-apps://ax.itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?type=Purple+Software&id=%d", 537516001];
+                    NSString *str = [NSString stringWithFormat:@"itms-apps://itunes.apple.com/app/id%d", 537516001];
                     NSLog(@"URL string:%@",str);
                     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
                     
@@ -534,10 +531,53 @@ int solvedTimes;
                     break;
             }
             break;
+        case TAG_ALERT_ADD_NEW_SOLVE:
+        {
+            if (buttonIndex == 1) {
+                NSString *text = [uiAlertView textFieldAtIndex:0].text;
+                NSNumberFormatter * nf = [[NSNumberFormatter alloc] init];
+                [nf setNumberStyle:NSNumberFormatterDecimalStyle];
+                NSArray* nums = [text componentsSeparatedByString:@"."];
+                if (nums.count > 2) {
+                    text = [NSString stringWithFormat:@"%@.%@", (NSString *)[nums objectAtIndex:0], (NSString *)[nums objectAtIndex:1]];
+                }
+                NSNumber * myNumber = [nf numberFromString:text];
+                NSLog(@"%f", [myNumber doubleValue]);
+                int time = (int)([myNumber doubleValue] * 1000);
+                [self.session addSolve:time withPenalty:PENALTY_NO_PENALTY scramble:self.thisScramble];
+                [CHTSessionManager saveSession:self.session];
+                self.tabBarItem.badgeValue = [NSString stringWithFormat:@"%d", self.session.numberOfSolves];
+                self.timeLabel.text = [[self.session lastSolve] toString];
+                [self displayNextScramble];
+                [self checkRated];
+                
+            }
+        }
+            break;
         default:
             break;
     }
     self.tabBarItem.badgeValue = [NSString stringWithFormat:@"%d", self.session.numberOfSolves];
+}
+
+- (void) checkRated {
+    solvedTimes++;
+    BOOL ifRated = [CHTSettings getSavedBool:@"ifRated"];
+    if (solvedTimes >= 100) {
+        solvedTimes = 0;
+        if (!ifRated) {
+            UIAlertView *rateAlert = [[UIAlertView alloc]
+                                      initWithTitle:[CHTUtil getLocalizedString:@"rateTitle" ]
+                                      message:[CHTUtil getLocalizedString:@"rateBody"]
+                                      delegate:self
+                                      cancelButtonTitle:[CHTUtil getLocalizedString:@"remind later"]
+                                      otherButtonTitles:[CHTUtil getLocalizedString:@"remind now"], [CHTUtil getLocalizedString:@"never remind"], nil];
+            [rateAlert setTag:TAG_ALERT_RATE_ME];
+            [rateAlert show];
+        }
+    }
+    NSLog(@"times: %d", solvedTimes);
+    [CHTSettings saveInt:solvedTimes forKey:@"solvedTimes"];
 }
 
 @end

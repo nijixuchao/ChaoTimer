@@ -10,6 +10,7 @@
 //
 
 #import "CustomIOS7AlertView.h"
+#import "CHTUtil.h"
 
 const static CGFloat kCustomIOS7AlertViewDefaultButtonHeight       = 45;
 const static CGFloat kCustomIOS7AlertViewDefaultButtonSpacerHeight = 0.5f;
@@ -17,37 +18,66 @@ const static CGFloat kCustomIOS7AlertViewCornerRadius              = 7;
 const static CGFloat kCustomIOS7MotionEffectExtent                 = 10.0;
 #define lineColor [UIColor colorWithRed:210/255.0 green:210/255.0 blue:210/255.0 alpha:1.0f]
 
+const NSInteger myOrientation[] = {0,0,2,1,3};
+
+@interface CustomIOS7AlertView()
+@property (nonatomic, assign) UIInterfaceOrientation statueOrientation;
+@end
+
 @implementation CustomIOS7AlertView
 
 CGFloat buttonHeight = 0;
 CGFloat buttonSpacerHeight = 0;
 
-@synthesize parentView, containerView, dialogView, buttonView;
+@synthesize parentView, containerView, dialogView, buttonView, onButtonTouchUpInside;
 @synthesize delegate;
 @synthesize buttonTitles;
 @synthesize useMotionEffects;
 
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
+}
+
 - (id)initWithParentView: (UIView *)_parentView
 {
-    self = [super initWithFrame:_parentView.frame];
-    
+    self = [super init];
     if (self) {
-        parentView = _parentView;
+        
+        if (_parentView) {
+            self.frame = _parentView.frame;
+            parentView = _parentView;
+        } else {
+            self.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
+        }
+        
         delegate = self;
         useMotionEffects = false;
         buttonTitles = @[@"Close"];
+        self.statueOrientation = [[UIApplication sharedApplication] statusBarOrientation];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleRotationNotification:) name:UIDeviceOrientationDidChangeNotification object:nil];
+        
     }
     return self;
+}
+
+- (id)init
+{
+    return [self initWithParentView:NULL];
 }
 
 // Create the dialog view, and animate opening the dialog
 - (void)show
 {
+    self.autoresizesSubviews = YES;
+    self.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleTopMargin;
     dialogView = [self createContainerView];
 
+#if (defined(__IPHONE_7_0))
     if (useMotionEffects) {
         [self applyMotionEffects];
     }
+#endif
 
     dialogView.layer.opacity = 0.5f;
     dialogView.layer.transform = CATransform3DMakeScale(1.3f, 1.3f, 1.0);
@@ -55,7 +85,45 @@ CGFloat buttonSpacerHeight = 0;
     self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0];
 
     [self addSubview:dialogView];
-    [parentView addSubview:self];
+    // Can be attached to a view or to the top most window
+    // Attached to a view:
+    if (parentView != NULL) {
+        [parentView addSubview:self];
+        
+        // Attached to the top most window (make sure we are using the right orientation):
+    } else {
+        UIInterfaceOrientation interfaceOrientation = [[UIApplication sharedApplication] statusBarOrientation];
+
+        switch (interfaceOrientation) {
+            case UIInterfaceOrientationLandscapeLeft:
+                
+                self.transform = CGAffineTransformMakeRotation(M_PI * 270.0 / 180.0);
+                NSLog(@"landscape left");
+                break;
+                
+            case UIInterfaceOrientationLandscapeRight:
+                self.transform = CGAffineTransformMakeRotation(M_PI * 90.0 / 180.0);
+                NSLog(@"landscape right");
+                break;
+                
+            case UIInterfaceOrientationPortraitUpsideDown:
+                self.transform = CGAffineTransformMakeRotation(M_PI * 180.0 / 180.0);
+                NSLog(@"portrate upsidedown");
+                break;
+                
+            default:
+                break;
+        }
+        
+        NSLog(@"width %f, height %f", self.frame.size.width, self.frame.size.height);
+        if ([CHTUtil getDevice] == DEVICE_PAD) {
+            [self setFrame:CGRectMake(0, 0, 768.0f, 1024.0f)];
+        } else {
+            [self setFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
+        }
+        
+        [[[UIApplication sharedApplication] keyWindow] addSubview:self];
+    }
 
     [UIView animateWithDuration:0.2f delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
 					 animations:^{
@@ -70,7 +138,13 @@ CGFloat buttonSpacerHeight = 0;
 // Button has touched
 - (IBAction)customIOS7dialogButtonTouchUpInside:(id)sender
 {
-    [delegate customIOS7dialogButtonTouchUpInside:self clickedButtonAtIndex:[sender tag]];
+    if (delegate != NULL) {
+        [delegate customIOS7dialogButtonTouchUpInside:self clickedButtonAtIndex:[sender tag]];
+    }
+    
+    if (onButtonTouchUpInside != NULL) {
+        onButtonTouchUpInside(self, [sender tag]);
+    }
 }
 
 // Default button behaviour
@@ -124,20 +198,41 @@ CGFloat buttonSpacerHeight = 0;
     CGFloat dialogWidth = containerView.frame.size.width;
     CGFloat dialogHeight = containerView.frame.size.height + buttonHeight + buttonSpacerHeight;
 
-    CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
-    CGFloat screenHeight = [UIScreen mainScreen].bounds.size.height;
-
+    CGFloat screenWidth;
+    CGFloat screenHeight;
+    
+    if ([CHTUtil getDevice] == DEVICE_PHONE) {
+        screenWidth = [UIScreen mainScreen].bounds.size.width;
+        screenHeight = [UIScreen mainScreen].bounds.size.height;
+    } else {
+        screenWidth = [UIScreen mainScreen].applicationFrame.size.width;
+        screenHeight = [UIScreen mainScreen].applicationFrame.size.height;
+    }
+    
+    if (screenWidth == 748.0f) {
+        screenWidth = 1024.0f;
+        screenHeight = 748.0f;
+    }
+    
+    // orientation sucks, handle only ipad and iphone-portrait
+    /*
     UIDeviceOrientation deviceOrientation = [[UIDevice currentDevice] orientation];
     if (UIDeviceOrientationIsLandscape(deviceOrientation)) {
         CGFloat tmp = screenWidth;
         screenWidth = screenHeight;
         screenHeight = tmp;
+        if ([CHTUtil getDevice] == DEVICE_PAD) {
+            NSLog(@"here");
+            screenWidth = 1024.0f;
+            screenHeight = 768.0f;
+        }
     }
-
+*/
     // For the black background
     [self setFrame:CGRectMake(0, 0, screenWidth, screenHeight)];
 
     // This is the dialog's container; we attach the custom content and the buttons to this one
+    NSLog(@"dialog container\nscreenwidth %f\ndialogwidth %f\nscreenheight %f\ndialogheight %f", screenWidth, dialogWidth, screenHeight, dialogHeight);
     UIView *dialogContainer = [[UIView alloc] initWithFrame:CGRectMake((screenWidth - dialogWidth) / 2, (screenHeight - dialogHeight) / 2, dialogWidth, dialogHeight)];
 
 
@@ -210,7 +305,7 @@ CGFloat buttonSpacerHeight = 0;
         [container addSubview:closeButton];
     }
 }
-
+#if (defined(__IPHONE_7_0))
 // Add motion effects
 - (void)applyMotionEffects {
 
@@ -232,6 +327,17 @@ CGFloat buttonSpacerHeight = 0;
     motionEffectGroup.motionEffects = @[horizontalEffect, verticalEffect];
 
     [dialogView addMotionEffect:motionEffectGroup];
+}
+#endif
+
+#pragma mark - NSNotification
+- (void)handleRotationNotification:(NSNotification *)noti
+{
+    UIInterfaceOrientation interfaceOrientation = [[UIApplication sharedApplication] statusBarOrientation];
+    
+    NSInteger num = myOrientation[self.statueOrientation] - myOrientation[interfaceOrientation];
+    
+    dialogView.transform = CGAffineTransformMakeRotation(-num * M_PI_2);
 }
 
 @end
