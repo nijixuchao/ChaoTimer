@@ -24,7 +24,6 @@
 @property (nonatomic, strong) CHTSession *session;
 @property (nonatomic, strong) UIPopoverController *popoverController;
 @property (nonatomic, strong) CHTTheme *timerTheme;
-@property (nonatomic, strong) id<ISSCAttachment> snapshot;
 @end
 
 @implementation CHTStatsViewController
@@ -32,7 +31,6 @@
 @synthesize stats = _stats;
 @synthesize timerTheme;
 @synthesize popoverController;
-@synthesize snapshot;
 
 - (CHTSession *) session {
     if (!_session) {
@@ -75,16 +73,6 @@
     self.timerTheme = [CHTTheme getTimerTheme];
     [super viewWillAppear:animated];
 }
-
-- (void)viewDidLayoutSubviews
-{
-    NSLog(@"view did layout subviews");
-    [super viewDidLayoutSubviews];
-    if (!self.snapshot) {
-        [self performSelector:@selector(screenshot) withObject:nil afterDelay:0.1];
-    }
-}
-
 
 - (void)didReceiveMemoryWarning
 {
@@ -275,22 +263,29 @@
 - (void) share {
     UINavigationBar *bar = self.navigationController.navigationBar;
     UIView *view = (UIView *)[bar.subviews objectAtIndex:3];
-    if (self.snapshot == nil) {
-        NSLog(@"no screenshot");
-        [self screenshot];
-    }
-    [CHTSocial share:view delegate:self session:self.session image:self.snapshot];
+    [CHTSocial share:view delegate:self session:self.session image:[self screenshot]];
 }
 
-- (void) screenshot {
+- (id<ISSCAttachment>) screenshot {
     NSLog(@"Screenshot");
-    UIGraphicsBeginImageContextWithOptions(self.view.bounds.size, NO, [UIScreen mainScreen].scale);
     
-    [self.view drawViewHierarchyInRect:self.view.bounds afterScreenUpdates:YES];
+    CGPoint savedContentOffset = self.tableView.contentOffset;
+    CGRect savedFrame = self.tableView.frame;
+    CGFloat headerHeight = 22;
+    CGFloat navBarHeight = 44;
+
+    self.tableView.contentOffset = CGPointMake(0, 0- navBarHeight - headerHeight);
+    self.tableView.frame = CGRectMake(0, 0, self.tableView.contentSize.width, self.tableView.contentSize.height - self.tableView.contentOffset.y);
+    
+    
+    UIGraphicsBeginImageContextWithOptions(self.tableView.contentSize, NO, [UIScreen mainScreen].scale);
+    
+    [self.tableView drawViewHierarchyInRect:self.tableView.bounds afterScreenUpdates:YES];
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    self.snapshot = [ShareSDK pngImageWithImage:image];
-    return;
+    self.tableView.contentOffset = savedContentOffset;
+    self.tableView.frame = savedFrame;
+    return [ShareSDK pngImageWithImage:image];
 }
 
 - (void)viewOnWillDisplay:(UIViewController *)viewController shareType:(ShareType)shareType

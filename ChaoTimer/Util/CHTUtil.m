@@ -89,13 +89,17 @@
 {
     NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
     NSString *crtVersion = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
-    NSString *oldVersion = [CHTSettings getSavedString:@"appVersion"];
+    NSString *oldVersion = [CHTSettings stringForKey:@"appVersion"];
     NSLog(@"AppVersion old: %@, new: %@", oldVersion, crtVersion);
     if ([crtVersion isEqualToString:oldVersion]) {
         return false;
     } else {
         [CHTSettings saveString:crtVersion forKey:@"appVersion"];
-        return true;
+        if ([[crtVersion substringToIndex:3] isEqualToString:[oldVersion substringToIndex:3]]) {
+            return false;
+        } else {
+            return true;
+        }
     }
 }
 

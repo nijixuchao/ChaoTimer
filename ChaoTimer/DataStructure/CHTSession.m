@@ -300,7 +300,7 @@
     NSString *str = [[CHTUtil getLocalizedString:@"Number of solves: "] stringByAppendingFormat:@"%d\n", self.numberOfSolves];
     if (self.numberOfSolves > 0) {
         NSString *bestTime = [[[CHTUtil getLocalizedString:@"Best Time: "] stringByAppendingString:[[self bestSolve] toString]] stringByAppendingFormat:@"\n"];
-        NSString *worstTime = [[[CHTUtil getLocalizedString:@"Best Time: "] stringByAppendingString:[[self worstSolve] toString]] stringByAppendingFormat:@"\n"];
+        NSString *worstTime = [[[CHTUtil getLocalizedString:@"Worst Time: "] stringByAppendingString:[[self worstSolve] toString]] stringByAppendingFormat:@"\n"];
         str = [[str stringByAppendingString:bestTime] stringByAppendingString:worstTime];
         if (!containIndividualTime) {
             if (self.numberOfSolves >= 5) {

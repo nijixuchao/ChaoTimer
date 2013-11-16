@@ -43,7 +43,7 @@ int solveDetailDisplay;
 }
 
 - (int)solveOrder {
-    return [CHTSettings getSavedInt:@"solveOrder"];
+    return [CHTSettings intForKey:@"solveOrder"];
 }
 
 - (void)viewDidLoad
@@ -60,7 +60,7 @@ int solveDetailDisplay;
     [super viewWillAppear:animated];
     [self getBestAndWorst];
     [self.tableView reloadData];
-    solveDetailDisplay = [CHTSettings getSavedInt:@"solveDetailDisplay"];
+    solveDetailDisplay = [CHTSettings intForKey:@"solveDetailDisplay"];
 }
 
 - (void)didReceiveMemoryWarning
@@ -105,7 +105,7 @@ int solveDetailDisplay;
                 UISegmentedControl *solveOrderSegment = [[UISegmentedControl alloc] initWithItems:solveOrders];
                 
                 [solveOrderSegment setTintColor:[self.timerTheme getTintColor]];
-                int order = [CHTSettings getSavedInt:@"solveOrder"];
+                int order = [CHTSettings intForKey:@"solveOrder"];
                 [solveOrderSegment setSelectedSegmentIndex:order];
                 [solveOrderSegment addTarget:self action:@selector(solveOrderSegmentChange:) forControlEvents:UIControlEventValueChanged];
                 cell.accessoryView = solveOrderSegment;

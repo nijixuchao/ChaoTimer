@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CHTLicenseViewController : UIViewController
+@interface CHTLicenseViewController : UIViewController<UIWebViewDelegate>
 @property (weak, nonatomic) IBOutlet UIWebView *webView;
 
 @end

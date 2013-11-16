@@ -17,4 +17,5 @@
 + (NSMutableArray *)getShareTypeList;
 + (NSMutableArray *)getNotShareTypeList;
 + (void)saveShareTypeList: (NSMutableArray *)shareList notShareList: (NSMutableArray *)notShareList;
++ (void) superShare:(UIView *)view delegate:(id<ISSShareViewDelegate>)delegate;
 @end

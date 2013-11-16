@@ -20,7 +20,7 @@
 "new session" = "新建分组";
 "license" = "版权";
 "new" = "新";
-
+"OK" = "好的";
 "stickySessions" = "置顶分组";
 "mySessions" = "我的分组";
 "main session" = "默认分组";
@@ -139,7 +139,9 @@
 "socialFooter" = "切换开关来授权/取消授权，某些社交网络不支持授权";
 "share" = "分享";
 "manuallyAdd" = "新还原";
-"originalTime" = "原始时间(秒)";
-
+"originalTime" = "请输入时间(秒)";
+"knockToStop" = "拍桌子停表";
+"knockToStopDetail" = "";
+"sensitivity" = "灵敏度";
 "appUpdated" = "ChaoTimer 更新了";
-"appUpdatedDetail" = "1. 新的图标，用户界面以及全新的设计，为 iOS 7 打造\n2. 新加7种主题，史上最漂亮的魔方计时器\n3. 新加38种类型打乱，包括SQ1随机状态打乱，二阶 CLL/EG练习打乱，三阶PLL练习等\n4. 为每次还原新加入一些具体信息\n5. 计时器设置中新加入一些选项\n6. 完美的社交网络分享体验\n7. 手动添加成绩";
+"appUpdatedDetail" = "1. 新的图标，用户界面以及全新的设计，为 iOS 7 打造\n2. 新加7种主题，史上最漂亮的魔方计时器\n3. 38种类型打乱，包括SQ1随机状态打乱，二阶 CLL/EG练习打乱，三阶PLL练习等\n4. 为每次还原新加入新的具体信息\n5. 完美的社交网络分享体验\n6. 手动添加成绩\n7. 拍桌子停表";

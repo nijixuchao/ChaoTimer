@@ -26,6 +26,7 @@
 #define renrenAppSecret @"8923341e62814acfb37dd54ab99c1f30"
 #define twitterKey @"U1a1KkshI2KsAK03DOvU4Q"
 #define twitterSecret @"XhoYw6w014RMvCaFDb7EIP38F5EJUtVPY9ZMxOfI"
+#define myAppUrl @"https://itunes.apple.com/us/app/chaotimer-professional-cube/id537516001?ls=1&mt=8"
 
 @interface CHTUtil()
 
@@ -59,7 +60,7 @@
                                        defaultContent:@"ChaoTimer"
                                                 image:image
                                                 title:@"ChaoTimer"
-                                                  url:@"http://t.cn/zWbXPmG"
+                                                  url:myAppUrl
                                           description:@"From ChaoTimer"
                                             mediaType:SSPublishContentMediaTypeNews];
     
@@ -100,9 +101,57 @@
                             }];
 }
 
++ (void) superShare:(UIView *)view delegate:(id<ISSShareViewDelegate>)delegate {
+    id<ISSContainer> container = [ShareSDK container];
+    [container setIPadContainerWithView:view
+                            arrowDirect:UIPopoverArrowDirectionUp];
+    
+    id<ISSContent> publishContent = [ShareSDK content:@" "
+                                       defaultContent:@" "
+                                                image:nil
+                                                title:@"share title"
+                                                  url:myAppUrl
+                                          description:@"From ChaoTimer"
+                                            mediaType:SSPublishContentMediaTypeText];
+
+    id<ISSAuthOptions> authOptions = [ShareSDK authOptionsWithAutoAuth:YES
+                                                         allowCallback:YES
+                                                                scopes:nil
+                                                         powerByHidden:YES
+                                                        followAccounts:nil
+                                                         authViewStyle:SSAuthViewStyleFullScreenPopup
+                                                          viewDelegate:delegate
+                                               authManagerViewDelegate:delegate];
+    
+    
+    NSArray *shareList = [ShareSDK getShareListWithType:ShareTypeSinaWeibo, ShareTypeFacebook, ShareTypeTwitter, ShareTypeRenren, ShareTypeWeixiSession, ShareTypeWeixiTimeline, nil];
+    id<ISSShareOptions> shareOptions = [ShareSDK defaultShareOptionsWithTitle:@"Share" oneKeyShareList:nil qqButtonHidden:YES wxSessionButtonHidden:YES wxTimelineButtonHidden:YES showKeyboardOnAppear:NO shareViewDelegate:delegate friendsViewDelegate:delegate picViewerViewDelegate:delegate];
+    [shareOptions setCameraButtonHidden:NO];
+    [shareOptions setMentionButtonHidden:NO];
+    [shareOptions setTopicButtonHidden:NO];
+    
+    [ShareSDK showShareActionSheet:container
+                         shareList:shareList
+                           content:publishContent
+                     statusBarTips:YES
+                       authOptions:authOptions
+                      shareOptions:shareOptions
+                            result:^(ShareType type, SSPublishContentState state, id<ISSStatusInfo> statusInfo, id<ICMErrorInfo> error, BOOL end) {
+                                if (state == SSPublishContentStateSuccess)
+                                {
+                                    NSLog(@"分享成功");
+                                }
+                                else if (state == SSPublishContentStateFail)
+                                {
+                                    NSLog(@"分享失败,错误码:%d,错误描述:%@", [error errorCode], [error errorDescription]);
+                                }
+                            }];
+
+}
+
 + (NSMutableArray *)getShareTypeList {
     if ([CHTSettings hasObjectForKey:@"shareList"]) {
-        return [(NSArray *)[CHTSettings getSavedObject:@"shareList"] mutableCopy];
+        return [(NSArray *)[CHTSettings objectForKey:@"shareList"] mutableCopy];
     } else {
         if ([[CHTUtil getLocalizedString:@"language"] isEqualToString:@"Chinese"]) {
             return [NSMutableArray arrayWithObjects:
@@ -128,7 +177,7 @@
 
 + (NSMutableArray *)getNotShareTypeList {
     if ([CHTSettings hasObjectForKey:@"notShareList"]) {
-        return [(NSArray *)[CHTSettings getSavedObject:@"notShareList"] mutableCopy];
+        return [(NSArray *)[CHTSettings objectForKey:@"notShareList"] mutableCopy];
     } else {
         if ([[CHTUtil getLocalizedString:@"language"] isEqualToString:@"Chinese"]) {
             return [NSMutableArray arrayWithObjects:
@@ -269,7 +318,7 @@
                             defaultContent:@"ChaoTimer"
                                      image:image
                                      title:[ShareSDK getClientNameWithType:type]
-                                       url:@"http://t.cn/zWbXPmG"
+                                       url:myAppUrl
                                description:@"From ChaoTimer"
                                  mediaType:SSPublishContentMediaTypeText];
     } else if(type == ShareTypeRenren) {
@@ -277,7 +326,7 @@
                             defaultContent:@"ChaoTimer"
                                      image:image
                                      title:@"ChaoTimer"
-                                       url:@"http://t.cn/zWbXPmG"
+                                       url:myAppUrl
                                description:@"From ChaoTimer"
                                  mediaType:SSPublishContentMediaTypeText];
     } else if(type == ShareTypeCopy) {
@@ -288,13 +337,20 @@
                                        url:nil
                                description:nil
                                  mediaType:SSPublishContentMediaTypeText];
-    }
-    else {
+    } else if (type == ShareTypeMail) {
+        publishContent = [ShareSDK content:[self getShareStringOfSession:session byType:type avg:avg best:best best5:best5 best12:best12 best100:best100]
+                            defaultContent:@"ChaoTimer"
+                                     image:image
+                                     title:[CHTUtil getLocalizedString:@"mailSubject"]
+                                       url:myAppUrl
+                               description:@"From ChaoTimer"
+                                 mediaType:SSPublishContentMediaTypeNews];
+    }else {
        publishContent = [ShareSDK content:[self getShareStringOfSession:session byType:type avg:avg best:best best5:best5 best12:best12 best100:best100]
              defaultContent:@"ChaoTimer"
                       image:image
                       title:[ShareSDK getClientNameWithType:type]
-                        url:@"http://t.cn/zWbXPmG"
+                        url:myAppUrl
                 description:@"From ChaoTimer"
                   mediaType:SSPublishContentMediaTypeNews];
     }
@@ -335,17 +391,17 @@
         {
             scrambleType = [CHTScramble getScrambleTypeStringByType:session.currentType language:1];
             if (num == 0) {
-                textToShare = [NSString stringWithFormat:@"我正在用#ChaoTimer#进行%@测速，你也来试试？http://t.cn/zWbXPmG", scrambleType];
+                textToShare = [NSString stringWithFormat:@"我正在用#ChaoTimer#进行%@测速，你也来试试？%@", scrambleType, myAppUrl];
             } else if (num < 3) {
-                textToShare = [NSString stringWithFormat:@"我刚刚用#ChaoTimer#完成了%d次%@测速，最快单次：%@，你也来试试？http://t.cn/zWbXPmG", num, scrambleType, best];
+                textToShare = [NSString stringWithFormat:@"我刚刚用#ChaoTimer#完成了%d次%@测速，最快单次：%@，你也来试试？%@", num, scrambleType, best, myAppUrl];
             } else if (num < 5) {
-                textToShare = [NSString stringWithFormat:@"我刚刚用#ChaoTimer#完成了%d次%@测速，平均：%@，最快单次：%@，你也来试试？http://t.cn/zWbXPmG", num, scrambleType, avg, best];
+                textToShare = [NSString stringWithFormat:@"我刚刚用#ChaoTimer#完成了%d次%@测速，平均：%@，最快单次：%@，你也来试试？%@", num, scrambleType, avg, best, myAppUrl];
             } else if (num < 12) {
-                textToShare = [NSString stringWithFormat:@"我刚刚用#ChaoTimer#完成了%d次%@测速，平均：%@，最快单次：%@，最快五次：%@，你也来试试？http://t.cn/zWbXPmG", num, scrambleType, avg, best, best5];
+                textToShare = [NSString stringWithFormat:@"我刚刚用#ChaoTimer#完成了%d次%@测速，平均：%@，最快单次：%@，最快五次：%@，你也来试试？%@", num, scrambleType, avg, best, best5, myAppUrl];
             } else if (num < 100) {
-                textToShare = [NSString stringWithFormat:@"我刚刚用#ChaoTimer#完成了%d次%@测速，平均：%@，最快单次：%@，最快五次：%@，最快12次：%@，你也来试试？http://t.cn/zWbXPmG", num, scrambleType, avg, best, best5, best12];
+                textToShare = [NSString stringWithFormat:@"我刚刚用#ChaoTimer#完成了%d次%@测速，平均：%@，最快单次：%@，最快五次：%@，最快12次：%@，你也来试试？%@", num, scrambleType, avg, best, best5, best12, myAppUrl];
             } else {
-                textToShare = [NSString stringWithFormat:@"我刚刚用#ChaoTimer#完成了%d次%@测速，平均：%@，最快单次：%@，最快五次：%@，最快12次：%@，最快100次：%@，你也来试试？http://t.cn/zWbXPmG", num, scrambleType, avg, best, best5, best12, best100];
+                textToShare = [NSString stringWithFormat:@"我刚刚用#ChaoTimer#完成了%d次%@测速，平均：%@，最快单次：%@，最快五次：%@，最快12次：%@，最快100次：%@，你也来试试？%@", num, scrambleType, avg, best, best5, best12, best100, myAppUrl];
             }
         }
             break;
@@ -413,17 +469,17 @@
             if ([[CHTUtil getLocalizedString:@"language"] isEqualToString:@"Chinese"]) {
                 scrambleType = [CHTScramble getScrambleTypeStringByType:session.currentType language:1];
                 if (num == 0) {
-                    textToShare = [NSString stringWithFormat:@"我正在用#ChaoTimer#进行%@测速，你也来试试？http://t.cn/zWbXPmG", scrambleType];
+                    textToShare = [NSString stringWithFormat:@"我正在用#ChaoTimer#进行%@测速，你也来试试？%@", scrambleType, myAppUrl];
                 } else if (num < 3) {
-                    textToShare = [NSString stringWithFormat:@"我刚刚用#ChaoTimer#完成了%d次%@测速，最快单次：%@，你也来试试？http://t.cn/zWbXPmG", num, scrambleType, best];
+                    textToShare = [NSString stringWithFormat:@"我刚刚用#ChaoTimer#完成了%d次%@测速，最快单次：%@，你也来试试？%@", num, scrambleType, best, myAppUrl];
                 } else if (num < 5) {
-                    textToShare = [NSString stringWithFormat:@"我刚刚用#ChaoTimer#完成了%d次%@测速，平均：%@，最快单次：%@，你也来试试？http://t.cn/zWbXPmG", num, scrambleType, avg, best];
+                    textToShare = [NSString stringWithFormat:@"我刚刚用#ChaoTimer#完成了%d次%@测速，平均：%@，最快单次：%@，你也来试试？%@", num, scrambleType, avg, best, myAppUrl];
                 } else if (num < 12) {
-                    textToShare = [NSString stringWithFormat:@"我刚刚用#ChaoTimer#完成了%d次%@测速，平均：%@，最快单次：%@，最快五次：%@，你也来试试？http://t.cn/zWbXPmG", num, scrambleType, avg, best, best5];
+                    textToShare = [NSString stringWithFormat:@"我刚刚用#ChaoTimer#完成了%d次%@测速，平均：%@，最快单次：%@，最快五次：%@，你也来试试？%@", num, scrambleType, avg, best, best5, myAppUrl];
                 } else if (num < 100) {
-                    textToShare = [NSString stringWithFormat:@"我刚刚用#ChaoTimer#完成了%d次%@测速，平均：%@，最快单次：%@，最快五次：%@，最快12次：%@，你也来试试？http://t.cn/zWbXPmG", num, scrambleType, avg, best, best5, best12];
+                    textToShare = [NSString stringWithFormat:@"我刚刚用#ChaoTimer#完成了%d次%@测速，平均：%@，最快单次：%@，最快五次：%@，最快12次：%@，你也来试试？%@", num, scrambleType, avg, best, best5, best12, myAppUrl];
                 } else {
-                    textToShare = [NSString stringWithFormat:@"我刚刚用#ChaoTimer#完成了%d次%@测速，平均：%@，最快单次：%@，最快五次：%@，最快12次：%@，最快100次：%@，你也来试试？http://t.cn/zWbXPmG", num, scrambleType, avg, best, best5, best12, best100];
+                    textToShare = [NSString stringWithFormat:@"我刚刚用#ChaoTimer#完成了%d次%@测速，平均：%@，最快单次：%@，最快五次：%@，最快12次：%@，最快100次：%@，你也来试试？%@", num, scrambleType, avg, best, best5, best12, best100, myAppUrl];
                 }
             } else {
                 scrambleType = [CHTScramble getScrambleTypeStringByType:session.currentType language:0];

@@ -20,7 +20,7 @@
 "new session" = "New Session";
 "license" = "Licenses";
 "new" = "new";
-
+"OK" = "OK";
 "stickySessions" = "Sticky Sessions";
 "mySessions" = "My Sessions";
 "main session" = "Default session";
@@ -140,7 +140,10 @@
 "socialFooter" = "Turn on/off the switches to auth/unauth the social networks, some items do not support authentication.";
 "share" = "Share";
 "manuallyAdd" = "Add new solve";
-"originalTime" = "Original Time (seconds)";
+"originalTime" = "Time in seconds";
+"knockToStop" = "Knock to Stop";
+"knockToStopDetail" = "Knock at table to stop timer";
+"sensitivity" = "Sensitivity";
 
 "appUpdated" = "ChaoTimer has updated";
-"appUpdatedDetail" = "1. New icon, new user interface and completely new design for iOS 7.\n2. Added 7 new themes. The most beautiful cube timer ever!\n3. Added 38 new types of scramble, including SQ1 random state, 2x2 CLL/EG training, 3x3 last layer/PLL trainings, etc.\n4. Added more details for each solve.\n5. Added more options in timer settings.\n6. Add more social networking functions.\n7. Manually add solves.";
+"appUpdatedDetail" = "1. Completely new design for iOS 7.\n2. 7 new themes. The most beautiful cube timer ever!\n3. 38 new types of scramble, including SQ1 random state, 2x2 CLL/EG training, 3x3 last layer/PLL trainings, etc.\n4. More details for each solve.\n5. Perfect social networking functions.\n6. Manually add solves.\n7. Knock to stop timer.";

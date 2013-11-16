@@ -18,6 +18,7 @@
     // Override point for customization after application launch.
     [CHTSocial registerShareSDK];
     [[CHTTheme getTimerTheme] setNavigationControllerTheme];
+    application.applicationSupportsShakeToEdit = YES;
     return YES;
 }
 							

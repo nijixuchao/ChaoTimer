@@ -16,7 +16,7 @@
 #import "CHTTheme.h"
 #import "CHTScrambler.h"
 #import <mach/mach_time.h>
-
+#import <CoreMotion/CoreMotion.h>
 
 #define TAG_ALERT_DELETE_LAST_SOLVE 1
 #define TAG_ALERT_CLEAR_SESSION 2
@@ -38,6 +38,7 @@
 @property (nonatomic, strong) CHTScramblePickerView *pickerView;
 @property NSTimer *inspectionTimer;
 @property NSTimer *inspectionOverTimeTimer;
+@property (strong, nonatomic) CMMotionManager *motionManager;
 @end
 
 @implementation CHTTimingViewController
@@ -52,6 +53,7 @@
 @synthesize pickerView;
 @synthesize inspectionTimer;
 @synthesize inspectionOverTimeTimer;
+@synthesize motionManager;
 
 BOOL wcaInspection;
 BOOL inspectionBegin;
@@ -61,6 +63,8 @@ int scrSubType;
 int oldScrType;
 int oldScrSubType;
 int solvedTimes;
+int threshold;
+BOOL knockToStop;
 
 - (CHTSession *) session {
     if (!_session) {
@@ -78,6 +82,7 @@ int solvedTimes;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [CHTSettings initUserDefaults];
     UIApplication *myApp = [UIApplication sharedApplication];
     [myApp setIdleTimerDisabled:YES];
     [myApp setStatusBarHidden:NO withAnimation:NO];
@@ -128,8 +133,10 @@ int solvedTimes;
         oldScrType = self.session.currentType;
         oldScrSubType = self.session.currentSubType;
     }
-    wcaInspection = [CHTSettings getSavedBool:@"wcaInspection"];
-    solvedTimes = [CHTSettings getSavedInt:@"solvedTimes"];
+    wcaInspection = [CHTSettings boolForKey:@"wcaInspection"];
+    solvedTimes = [CHTSettings intForKey:@"solvedTimes"];
+    knockToStop = [CHTSettings boolForKey:@"knockToStop"];
+    threshold = [CHTSettings intForKey:@"knockSensitivity"];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -154,6 +161,36 @@ int solvedTimes;
     [self.timeLabel setTextColor:self.timerTheme.textColor];
 }
 
+- (void) startCoreMotion
+{
+    if (knockToStop) {
+        self.motionManager = [[CMMotionManager alloc] init];
+        self.motionManager.gyroUpdateInterval = 0.01;
+
+        int tolerance = 150 - threshold;
+        NSLog(@"threshold: %d", threshold);
+        [self.motionManager startGyroUpdatesToQueue:[NSOperationQueue currentQueue]
+                                        withHandler:^(CMGyroData *gyroData, NSError *error) {
+                                            [self noticeRotationData:gyroData.rotationRate tolerance:(int)tolerance];
+                                        }];
+    }
+}
+
+- (void) stopCoreMotion
+{
+    if (self.motionManager) {
+        [self.motionManager stopGyroUpdates];
+    }
+}
+
+-(void)noticeRotationData:(CMRotationRate)rotation tolerance:(int)tolerance
+{
+    int value = abs(rotation.x * 1000) + abs(rotation.y * 1000) + abs(rotation.z * 1000);
+    if (value > tolerance) {
+        NSLog(@"value: %d, thrd: %d, rotX: %@, rotY: %@, rotZ: %@", value, tolerance, [NSString stringWithFormat:@" %fg",rotation.x], [NSString stringWithFormat:@" %fg",rotation.y], [NSString stringWithFormat:@" %fg",rotation.z]);
+        [self stopTimer];
+    }
+}
 
 - (void) setupGestures
 {
@@ -251,6 +288,7 @@ int solvedTimes;
                 self.time = 0;
                 self.myTimer = [NSTimer scheduledTimerWithTimeInterval:0.001 target:self selector:@selector(updateTime) userInfo:nil repeats:YES];
                 self.timerStatus = TIMER_TIMING;
+                [self startCoreMotion];
                 //[self hideTabBar:YES];
             }
         }
@@ -276,6 +314,7 @@ int solvedTimes;
                     self.myTimer = [NSTimer scheduledTimerWithTimeInterval:0.001 target:self selector:@selector(updateTime) userInfo:nil repeats:YES];
                     self.timerStatus = TIMER_TIMING;
                     inspectionBegin = NO;
+                    [self startCoreMotion];
                     //[self hideTabBar:YES];
                 }
             }
@@ -356,7 +395,7 @@ int solvedTimes;
         [CHTSessionManager saveSession:self.session];
         self.tabBarItem.badgeValue = [NSString stringWithFormat:@"%d", self.session.numberOfSolves];
         [self displayNextScramble];
-        
+        [self stopCoreMotion];
         [self checkRated];
     }
 }
@@ -562,7 +601,7 @@ int solvedTimes;
 
 - (void) checkRated {
     solvedTimes++;
-    BOOL ifRated = [CHTSettings getSavedBool:@"ifRated"];
+    BOOL ifRated = [CHTSettings boolForKey:@"ifRated"];
     if (solvedTimes >= 100) {
         solvedTimes = 0;
         if (!ifRated) {

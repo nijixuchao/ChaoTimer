@@ -130,7 +130,7 @@
 }
 
 + (CHTTheme *) getTimerTheme {
-    return [self initWithTheme:[CHTSettings getSavedInt:@"timerTheme"]];
+    return [self initWithTheme:[CHTSettings intForKey:@"timerTheme"]];
     //return [self initWithTheme:THEME_YELLOW];
 }
 

@@ -57,6 +57,7 @@
 		0C902E73181A07090003A904 /* 1hold.png in Resources */ = {isa = PBXBuildFile; fileRef = 0C902E6D181A07090003A904 /* 1hold.png */; };
 		0C902E74181A07090003A904 /* 2f2t.png in Resources */ = {isa = PBXBuildFile; fileRef = 0C902E6E181A07090003A904 /* 2f2t.png */; };
 		0C902E75181A07090003A904 /* 2fup.png in Resources */ = {isa = PBXBuildFile; fileRef = 0C902E6F181A07090003A904 /* 2fup.png */; };
+		0CA7691F1837D05D00EF3191 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CA7691E1837D05D00EF3191 /* CoreMotion.framework */; };
 		0CB52985181DCA9800EB4EA5 /* 1fd.png in Resources */ = {isa = PBXBuildFile; fileRef = 0CB52984181DCA9800EB4EA5 /* 1fd.png */; };
 		0CB52987181DDCB300EB4EA5 /* license@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0CB52986181DDCB300EB4EA5 /* license@2x.png */; };
 		0CB52989181DDCE500EB4EA5 /* license.png in Resources */ = {isa = PBXBuildFile; fileRef = 0CB52988181DDCE500EB4EA5 /* license.png */; };
@@ -268,6 +269,7 @@
 		0C902E6D181A07090003A904 /* 1hold.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 1hold.png; sourceTree = "<group>"; };
 		0C902E6E181A07090003A904 /* 2f2t.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 2f2t.png; sourceTree = "<group>"; };
 		0C902E6F181A07090003A904 /* 2fup.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 2fup.png; sourceTree = "<group>"; };
+		0CA7691E1837D05D00EF3191 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		0CB52984181DCA9800EB4EA5 /* 1fd.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 1fd.png; sourceTree = "<group>"; };
 		0CB52986181DDCB300EB4EA5 /* license@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "license@2x.png"; sourceTree = "<group>"; };
 		0CB52988181DDCE500EB4EA5 /* license.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = license.png; sourceTree = "<group>"; };
@@ -451,6 +453,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0CA7691F1837D05D00EF3191 /* CoreMotion.framework in Frameworks */,
 				0CF468961814B8B800643E69 /* libz.1.2.5.dylib in Frameworks */,
 				0CF468941814B8AE00643E69 /* libicucore.dylib in Frameworks */,
 				0CF468921814B8A000643E69 /* CoreTelephony.framework in Frameworks */,
@@ -572,6 +575,7 @@
 		0C2FA6DA17B1E37F00A006B5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0CA7691E1837D05D00EF3191 /* CoreMotion.framework */,
 				0CF468951814B8B800643E69 /* libz.1.2.5.dylib */,
 				0CF468931814B8AE00643E69 /* libicucore.dylib */,
 				0CF468911814B8A000643E69 /* CoreTelephony.framework */,
@@ -1281,6 +1285,7 @@
 		0C2FA70A17B1E37F00A006B5 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
@@ -1316,6 +1321,7 @@
 		0C2FA70B17B1E37F00A006B5 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";

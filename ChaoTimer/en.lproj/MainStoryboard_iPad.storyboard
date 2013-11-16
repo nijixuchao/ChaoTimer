@@ -2,7 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="4">
     <dependencies>
         <deployment defaultVersion="1792" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3746"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
     </dependencies>
     <scenes>
         <!--Timing View Controller - Timing-->
@@ -278,13 +278,19 @@
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <webView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="odh-eS-m4s">
+                            <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="odh-eS-m4s">
                                 <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             </webView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="odh-eS-m4s" firstAttribute="top" secondItem="daO-eE-1Je" secondAttribute="top" id="4ff-05-bVr"/>
+                            <constraint firstItem="odh-eS-m4s" firstAttribute="leading" secondItem="daO-eE-1Je" secondAttribute="leading" id="Vi1-vv-hCA"/>
+                            <constraint firstAttribute="trailing" secondItem="odh-eS-m4s" secondAttribute="trailing" id="gw7-5x-y5o"/>
+                            <constraint firstAttribute="bottom" secondItem="odh-eS-m4s" secondAttribute="bottom" id="irH-5g-Egu"/>
+                        </constraints>
                     </view>
                     <connections>
                         <outlet property="webView" destination="odh-eS-m4s" id="3zB-pX-BaS"/>
