@@ -198,6 +198,7 @@
 		0CF468991814BB4700643E69 /* CHTSocial.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CF468981814BB4700643E69 /* CHTSocial.m */; };
 		0CF4689F1817685900643E69 /* CHTSocialObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CF4689E1817685900643E69 /* CHTSocialObject.m */; };
 		0CF468A21817688A00643E69 /* CHTSocialViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0CF468A11817688A00643E69 /* CHTSocialViewController.m */; };
+		0CF7B4B3187E44D800B7500B /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CF7B4B2187E44D800B7500B /* CFNetwork.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -446,6 +447,7 @@
 		0CF4689E1817685900643E69 /* CHTSocialObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHTSocialObject.m; sourceTree = "<group>"; };
 		0CF468A01817688A00643E69 /* CHTSocialViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHTSocialViewController.h; sourceTree = "<group>"; };
 		0CF468A11817688A00643E69 /* CHTSocialViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHTSocialViewController.m; sourceTree = "<group>"; };
+		0CF7B4B2187E44D800B7500B /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -453,6 +455,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0CF7B4B3187E44D800B7500B /* CFNetwork.framework in Frameworks */,
 				0CA7691F1837D05D00EF3191 /* CoreMotion.framework in Frameworks */,
 				0CF468961814B8B800643E69 /* libz.1.2.5.dylib in Frameworks */,
 				0CF468941814B8AE00643E69 /* libicucore.dylib in Frameworks */,
@@ -520,8 +523,8 @@
 				0C2486991802370200209767 /* CHTScramblePickerView.m */,
 			);
 			name = CutomViews;
-			path = /Users/nijixuchao/Developer/ChaoTimer/ChaoTimer/CustomViews;
-			sourceTree = "<absolute>";
+			path = CustomViews;
+			sourceTree = "<group>";
 		};
 		0C2486921802349100209767 /* Scrambler */ = {
 			isa = PBXGroup;
@@ -551,9 +554,8 @@
 				0CE7D6E418064557008989B3 /* Gear.h */,
 				0CE7D6E518064557008989B3 /* Gear.m */,
 			);
-			name = Scrambler;
-			path = /Users/nijixuchao/Developer/ChaoTimer/ChaoTimer/Scrambler;
-			sourceTree = "<absolute>";
+			path = Scrambler;
+			sourceTree = "<group>";
 		};
 		0C2FA6CF17B1E37F00A006B5 = {
 			isa = PBXGroup;
@@ -575,6 +577,7 @@
 		0C2FA6DA17B1E37F00A006B5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0CF7B4B2187E44D800B7500B /* CFNetwork.framework */,
 				0CA7691E1837D05D00EF3191 /* CoreMotion.framework */,
 				0CF468951814B8B800643E69 /* libz.1.2.5.dylib */,
 				0CF468931814B8AE00643E69 /* libicucore.dylib */,
@@ -649,9 +652,8 @@
 				0CB5298A181DEED000EB4EA5 /* CHTLicenseViewController.h */,
 				0CB5298B181DEED000EB4EA5 /* CHTLicenseViewController.m */,
 			);
-			name = ViewController;
-			path = /Users/nijixuchao/Developer/ChaoTimer/ChaoTimer/ViewController;
-			sourceTree = "<absolute>";
+			path = ViewController;
+			sourceTree = "<group>";
 		};
 		0C2FA70D17B68BA400A006B5 /* Resource */ = {
 			isa = PBXGroup;
@@ -732,9 +734,8 @@
 				0C0D6E451818BD1100BE22CB /* wxTimeline_sm.png */,
 				0C0D6E461818BD1100BE22CB /* wxTimeline_sm@2x.png */,
 			);
-			name = Resource;
-			path = /Users/nijixuchao/Developer/ChaoTimer/ChaoTimer/Resource;
-			sourceTree = "<absolute>";
+			path = Resource;
+			sourceTree = "<group>";
 		};
 		0C2FA70E17B68BAF00A006B5 /* DataStructure */ = {
 			isa = PBXGroup;
@@ -748,9 +749,8 @@
 				0C2FA71617B9DB5600A006B5 /* CHTScramble.h */,
 				0C2FA71717B9DB5600A006B5 /* CHTScramble.m */,
 			);
-			name = DataStructure;
-			path = /Users/nijixuchao/Developer/ChaoTimer/ChaoTimer/DataStructure;
-			sourceTree = "<absolute>";
+			path = DataStructure;
+			sourceTree = "<group>";
 		};
 		0C2FA70F17B68BB900A006B5 /* Util */ = {
 			isa = PBXGroup;
@@ -778,9 +778,8 @@
 				0CE7D6B41803B1CD008989B3 /* CHTUpdater.h */,
 				0CE7D6B51803B1CD008989B3 /* CHTUpdater.m */,
 			);
-			name = ForUpdate;
-			path = /Users/nijixuchao/Developer/ChaoTimer/ChaoTimer/Util/ForUpdate;
-			sourceTree = "<absolute>";
+			path = ForUpdate;
+			sourceTree = "<group>";
 		};
 		0CE7D6B718063737008989B3 /* min2phase */ = {
 			isa = PBXGroup;

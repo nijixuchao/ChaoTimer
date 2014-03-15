@@ -107,6 +107,7 @@ BOOL knockToStop;
     [self.scrambler initSq1];
     [self changeScramble];
     [self.scrambleLabel setFont:[CHTTheme font:FONT_LIGHT iphoneSize:20.0f ipadSize:40.0f]];
+
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -118,7 +119,6 @@ BOOL knockToStop;
         [updateAlert show];
         [[self.tabBarController.tabBar.items objectAtIndex:2] setBadgeValue:[CHTUtil getLocalizedString:@"new"]];
     }
-    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -144,7 +144,6 @@ BOOL knockToStop;
     [self performSelector:@selector(stopTimer)];
     [super viewWillDisappear:animated];
 }
-
 
 - (void)didReceiveMemoryWarning
 {
