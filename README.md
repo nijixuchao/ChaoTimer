@@ -1,7 +1,7 @@
 ChaoTimer
 =========
 
-This is the source code of ChaoTimer.
+This is the source code of ChaoTimer 3.0
 
 # License GPLv3
 
